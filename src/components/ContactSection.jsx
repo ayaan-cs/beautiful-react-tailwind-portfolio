@@ -95,12 +95,12 @@ export const ContactSection = () => {
                   <div>
                     <h4 className="font-medium">GitHub</h4>
                     <a
-                        href="https://github.com/ayaan-cis"
+                        href="https://github.com/ayaan-cs"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-muted-foreground hover:text-primary transition-colors"
                     >
-                      github.com/ayaan-cis
+                      github.com/ayaan-cs
                     </a>
                   </div>
                 </div>
@@ -118,7 +118,7 @@ export const ContactSection = () => {
                     <Linkedin size={24} />
                   </a>
                   <a
-                      href="https://github.com/ayaan-cis"
+                      href="https://github.com/ayaan-cs"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-3 rounded-full bg-primary/10 hover:bg-primary/20 text-primary transition-all duration-300 hover:scale-110"

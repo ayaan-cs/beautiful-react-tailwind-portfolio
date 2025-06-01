@@ -146,7 +146,7 @@ export const GoGuardianDetailPage = () => {
 
                             <div className="flex flex-wrap justify-center gap-4">
                                 <a
-                                    href="https://github.com/ayaan-cs/goguardian"
+                                    href="https://github.com/ayaan-cs/GoGuardian"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="cosmic-button flex items-center gap-2"
@@ -155,7 +155,7 @@ export const GoGuardianDetailPage = () => {
                                     View Demo
                                 </a>
                                 <a
-                                    href="https://github.com/ayaan-cs/goguardian"
+                                    href="https://github.com/ayaan-cs/GoGuardian"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="px-6 py-2 rounded-full border border-primary text-primary hover:bg-primary/10 transition-colors duration-300 flex items-center gap-2"
@@ -480,7 +480,7 @@ func main() {
                         </p>
                         <div className="flex flex-wrap justify-center gap-4">
                             <a
-                                href="https://github.com/ayaan-cs/goguardian"
+                                href="https://github.com/ayaan-cs/GoGuardian"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="cosmic-button flex items-center gap-2"
