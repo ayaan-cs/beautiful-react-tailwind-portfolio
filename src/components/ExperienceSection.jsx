@@ -16,13 +16,24 @@ const experiences = [
     {
         id: 'data-scientist',
         title: 'Data Scientist',
-        company: 'USDA',
+        company: 'USDA Forest Service',
         type: 'Internship',
         period: 'Jun 2024 - Aug 2024',
         location: 'Austin, TX',
         description: 'My role comprised two main projects. I developed a data science solution using Google Earth Engine to monitor water quality in Fiji, applying different indices for detecting pollution and analyzing seasonal trends. The other involved Land Use Land Cover (LULC) for Fiji. My job was to photo-interpret sample plots of land, write R scripts for the interpretations\' accuracy, and compile my data for the 2021-2022 reporting period.',
         icon: <Database className="h-6 w-6" />,
         color: 'from-green-500 to-teal-500'
+    },
+    {
+        id: 'retail-sales',
+        title: 'Retail Sales Representative',
+        company: 'H-E-B',
+        type: 'Part-time',
+        period: 'Apr 2023 - Present',
+        location: 'Austin, TX',
+        description: 'Perishables associate representative that overlooks the floor of the department, making sure that all items are stocked and that premium customer service is provided. Also trained and experienced with the preparation of in-store items and organization of the storage area with power tools.',
+        icon: <Briefcase className="h-6 w-6" />,
+        color: 'from-red-500 to-red-700'
     }
 ];
 
@@ -110,7 +121,7 @@ export const ExperienceSection = () => {
                         <div className="p-3 rounded-full bg-primary/10 w-fit mx-auto mb-4">
                             <Briefcase className="h-6 w-6 text-primary" />
                         </div>
-                        <div className="text-2xl font-bold text-primary">2+</div>
+                        <div className="text-2xl font-bold text-primary">3+</div>
                         <div className="text-muted-foreground">Years Experience</div>
                     </div>
 

@@ -7,6 +7,19 @@ import {
 
 const certificates = [
     {
+        id: 'microsoft-security-essentials',
+        title: 'Microsoft Security Essentials Professional Certificate',
+        organization: 'Microsoft and LinkedIn',
+        issueDate: '2025-05-28',
+        credentialId: 'd41ddaf7b5de0bfc86a5f272e65129ab93c6d3a5dcc5c1af2362d951b2a4276d',
+        verificationUrl: 'https://www.linkedin.com/learning/certificates/d41ddaf7b5de0bfc86a5f272e65129ab93c6d3a5dcc5c1af2362d951b2a4276d',
+        category: 'Cybersecurity',
+        description: 'Comprehensive program covering AI security, governance, risk management, compliance (GRC), and cloud security fundamentals.',
+        skills: ['AI Security', 'Governance, Risk Management, and Compliance (GRC)', 'Cloud Security', 'Microsoft Security'],
+        icon: <Shield size={24} />,
+        color: 'from-blue-600 to-blue-800'
+    },
+    {
         id: 'generative-ai-essentials',
         title: 'Career Essentials in Generative AI',
         organization: 'Microsoft and LinkedIn',
