@@ -121,7 +121,7 @@ export const ExperienceSection = () => {
                         <div className="p-3 rounded-full bg-primary/10 w-fit mx-auto mb-4">
                             <Briefcase className="h-6 w-6 text-primary" />
                         </div>
-                        <div className="text-2xl font-bold text-primary">3+</div>
+                        <div className="text-2xl font-bold text-primary">5+</div>
                         <div className="text-muted-foreground">Years Experience</div>
                     </div>
 
@@ -137,8 +137,8 @@ export const ExperienceSection = () => {
                         <div className="p-3 rounded-full bg-primary/10 w-fit mx-auto mb-4">
                             <Database className="h-6 w-6 text-primary" />
                         </div>
-                        <div className="text-2xl font-bold text-primary">20+</div>
-                        <div className="text-muted-foreground">Research Studies</div>
+                        <div className="text-2xl font-bold text-primary">10+</div>
+                        <div className="text-muted-foreground">Projects/Collaborations Ongoing</div>
                     </div>
                 </div>
             </div>
