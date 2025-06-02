@@ -29,7 +29,7 @@ const experiences = [
         title: 'Retail Sales Representative',
         company: 'H-E-B',
         type: 'Part-time',
-        period: 'Apr 2023 - Present',
+        period: 'Apr 2023 - Current',
         location: 'Austin, TX',
         description: 'Perishables associate representative that overlooks the floor of the department, making sure that all items are stocked and that premium customer service is provided. Also trained and experienced with the preparation of in-store items and organization of the storage area with power tools.',
         icon: <Briefcase className="h-6 w-6" />,

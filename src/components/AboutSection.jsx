@@ -25,7 +25,8 @@ export const AboutSection = () => {
               </p>
 
               <p className="text-muted-foreground">
-                I speak and write in English and Urdu, and I am experienced in Hindi. When I'm not coding, I volunteer as an Animal Caretaker,
+                I speak and write in English and Urdu, and I am experienced in Hindi. When I'm not coding, I am listening to music, cooking new dishes,
+                tutoring fellow students, or volunteering as an Animal Caretaker,
                 providing care for animals and ensuring their well-being.
               </p>
 
@@ -34,7 +35,7 @@ export const AboutSection = () => {
                   Get In Touch
                 </a>
                 <a
-                    href="/resume.pdf"
+                    href="/assets/resume.pdf"
                     className="px-6 py-2 rounded-full border border-primary text-primary hover:bg-primary/10 transition-colors duration-300"
                 >
                   Download CV
