@@ -8,6 +8,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import emailjs from '@emailjs/browser';
 
 export const ContactSection = () => {
   const { toast } = useToast();
@@ -26,24 +27,59 @@ export const ContactSection = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // EmailJS configuration using environment variables
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+      // Check if environment variables are properly configured
+      if (!serviceId || !templateId || !publicKey) {
+        console.error('EmailJS environment variables are not properly configured');
+        toast({
+          title: "Configuration Error",
+          description: "Email service is not properly configured. Please contact me directly.",
+          variant: "destructive"
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        message: formData.message,
+        reply_to: formData.email,
+      };
+
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+
       toast({
-        title: "Message sent!",
+        title: "Message sent successfully!",
         description: "Thank you for your message. I'll get back to you soon.",
       });
-      setIsSubmitting(false);
+
       // Clear form
       setFormData({
         name: '',
         email: '',
         message: ''
       });
-    }, 1500);
+
+    } catch (error) {
+      console.error('EmailJS error:', error);
+      toast({
+        title: "Failed to send message",
+        description: "There was an error sending your message. Please try again or email me directly.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -108,7 +144,7 @@ export const ContactSection = () => {
 
               <div className="pt-8">
                 <h4 className="font-medium mb-6">Connect With Me</h4>
-                <div className="flex space-x-4 justify-center">
+                <div className="flex space-x-4">
                   <a
                       href="http://www.linkedin.com/in/ayaan-syed"
                       target="_blank"
