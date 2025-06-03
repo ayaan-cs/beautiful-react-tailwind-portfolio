@@ -29,18 +29,6 @@ export const AboutSection = () => {
                 tutoring fellow students, or volunteering as an Animal Caretaker,
                 providing care for animals and ensuring their well-being.
               </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <a href="#contact" className="cosmic-button">
-                  Get In Touch
-                </a>
-                <a
-                    href="/assets/resume.pdf"
-                    className="px-6 py-2 rounded-full border border-primary text-primary hover:bg-primary/10 transition-colors duration-300"
-                >
-                  Download CV
-                </a>
-              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-6">
@@ -86,6 +74,19 @@ export const AboutSection = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Buttons centered across full width */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
+            <a href="#contact" className="cosmic-button">
+              Get In Touch
+            </a>
+            <a
+                href="/assets/resume.pdf"
+                className="px-6 py-2 rounded-full border border-primary text-primary hover:bg-primary/10 transition-colors duration-300 text-center"
+            >
+              Download CV
+            </a>
           </div>
 
           {/* Education Section */}
