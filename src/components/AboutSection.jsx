@@ -89,39 +89,45 @@ export const AboutSection = () => {
             </a>
           </div>
 
-          {/* Education Section */}
+          {/* Education Section - CENTERED */}
           <div className="mt-16 gradient-border p-8 card-hover">
-            <div className="flex items-start gap-6">
-              <div className="p-4 rounded-full bg-primary/10">
-                <Book className="h-8 w-8 text-primary" />
+            <div className="text-center">
+              {/* Icon and title centered */}
+              <div className="flex justify-center items-center gap-4 mb-6">
+                <div className="p-4 rounded-full bg-primary/10">
+                  <Book className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-2xl font-semibold text-primary">Education</h3>
               </div>
-              <div className="flex-1">
-                <h3 className="text-2xl font-semibold text-primary mb-4">Education</h3>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="text-xl font-semibold">St. Edwards University</h4>
-                    <p className="text-muted-foreground">BA, Computer Information Science</p>
-                    <div className="flex items-center text-muted-foreground mt-2">
-                      <Calendar size={16} className="mr-2" />
-                      <span>August 2022 - Current</span>
-                      <MapPin size={16} className="ml-4 mr-2" />
-                      <span>Austin, TX</span>
-                    </div>
-                  </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                    <div>
-                      <h5 className="font-semibold text-foreground mb-2">Relevant Coursework</h5>
-                      <p className="text-muted-foreground text-sm">
-                        Concepts I & II, Algorithmic Problem Solving, Computation-Based Programming, Web Development,
-                        Computer Architecture, Data Structures, Intro to AI, Database Theory, Software Engineering
-                      </p>
-                    </div>
-                    <div>
-                      <h5 className="font-semibold text-foreground mb-2">Honors & Awards</h5>
-                      <p className="text-muted-foreground text-sm">President's Achievement Scholarship</p>
-                    </div>
+              {/* University info centered */}
+              <div className="space-y-4 mb-6">
+                <h4 className="text-xl font-semibold">St. Edwards University</h4>
+                <p className="text-muted-foreground">BA, Computer Information Science</p>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-muted-foreground">
+                  <div className="flex items-center">
+                    <Calendar size={16} className="mr-2" />
+                    <span>August 2022 - Current</span>
                   </div>
+                  <div className="flex items-center">
+                    <MapPin size={16} className="mr-2" />
+                    <span>Austin, TX</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Course and awards grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h5 className="font-semibold text-foreground mb-2">Relevant Coursework</h5>
+                  <p className="text-muted-foreground text-sm">
+                    Concepts I & II, Algorithmic Problem Solving, Computation-Based Programming, Web Development,
+                    Computer Architecture, Data Structures, Intro to AI, Database Theory, Software Engineering
+                  </p>
+                </div>
+                <div>
+                  <h5 className="font-semibold text-foreground mb-2">Honors & Awards</h5>
+                  <p className="text-muted-foreground text-sm">President's Achievement Scholarship</p>
                 </div>
               </div>
             </div>
