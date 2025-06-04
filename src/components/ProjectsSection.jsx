@@ -9,7 +9,7 @@ const projects = [
     image: '/projects/sentinelai.png',
     tags: ['Python', 'Scikit-learn', 'Streamlit', 'AI/ML', 'Cybersecurity'],
     demoUrl: 'https://sentinelaiapp.streamlit.app/',
-    githubUrl: 'https://github.com/ayaan-cis/sentinelai',
+    githubUrl: 'https://github.com/ayaan-cs/sentinelai',
     slug: 'sentinelai',
     icon: <Shield size={24} />,
     color: 'from-red-500 to-orange-500'
@@ -21,7 +21,7 @@ const projects = [
     image: '/projects/mindsight.png',
     tags: ['React', 'JavaScript', 'Hugging Face API', 'AI', 'Data Visualization'],
     demoUrl: 'https://mindsight-app.netlify.app/',
-    githubUrl: 'https://github.com/ayaan-cis/MindSight',
+    githubUrl: 'https://github.com/ayaan-cs/MindSight',
     slug: 'mindsight',
     icon: <Brain size={24} />,
     color: 'from-indigo-500 to-purple-500'
@@ -33,7 +33,7 @@ const projects = [
     image: '/projects/goguardian.png',
     tags: ['Golang', 'Docker', 'Redis', 'WebSockets', 'Security'],
     demoUrl: 'https://github.com/ayaan-cis/goguardian',
-    githubUrl: 'https://github.com/ayaan-cis/goguardian',
+    githubUrl: 'https://github.com/ayaan-cs/goguardian',
     slug: 'goguardian',
     icon: <Shield size={24} />,
     color: 'from-teal-500 to-emerald-500'
@@ -151,7 +151,7 @@ export const ProjectsSection = () => {
             <a
                 className="cosmic-button w-fit flex items-center mx-auto gap-2"
                 target="_blank"
-                href="https://github.com/ayaan-cis"
+                href="https://github.com/ayaan-cs"
             >
               Check My GitHub <ArrowRight size={16} />
             </a>
