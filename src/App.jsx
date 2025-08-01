@@ -4,7 +4,7 @@ import { Home } from "./pages/Home";
 import { NotFound } from "./pages/NotFound";
 import { SentinelAIDetailPage } from "./pages/projects/SentinelAIDetailPage";
 import { MindSightDetailPage } from "./pages/projects/MindSightDetailPage";
-import { GoGuardianDetailPage } from "./pages/projects/GoGuardianDetailPage";
+import { LaLigaTierListDetailPage } from "./pages/projects/LaLigaTierListDetailPage";
 import { Toaster } from "@/components/ui/toaster";
 import { StartupAnimation } from "./components/StartupAnimation";
 
@@ -68,7 +68,7 @@ function App() {
                         <Route index element={<Home />} />
                         <Route path="/projects/sentinelai" element={<SentinelAIDetailPage />} />
                         <Route path="/projects/mindsight" element={<MindSightDetailPage />} />
-                        <Route path="/projects/goguardian" element={<GoGuardianDetailPage />} />
+                        <Route path="/projects/laliga-tierlist" element={<LaLigaTierListDetailPage />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </BrowserRouter>

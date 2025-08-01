@@ -1,4 +1,4 @@
-import { ArrowRight, Github, ChevronRight, Eye, Shield, Brain } from "lucide-react";
+import { ArrowRight, Github, ChevronRight, Eye, Shield, Brain, BarChart } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const projects = [
@@ -27,16 +27,16 @@ const projects = [
     color: 'from-indigo-500 to-purple-500'
   },
   {
-    id: 'goguardian',
-    title: 'GoGuardian',
-    description: 'High-performance API security monitoring system built with Golang, leveraging concurrent processing to detect and mitigate threats in real-time.',
-    image: '/projects/goguardian.png',
-    tags: ['Golang', 'Docker', 'Redis', 'WebSockets', 'Security'],
-    demoUrl: 'https://github.com/ayaan-cis/goguardian',
-    githubUrl: 'https://github.com/ayaan-cs/goguardian',
-    slug: 'goguardian',
-    icon: <Shield size={24} />,
-    color: 'from-teal-500 to-emerald-500'
+    id: 'laliga-tierlist',
+    title: 'LaLiga Teams Tier List',
+    description: 'Comprehensive data science analysis of LaLiga teams with AI-powered tier rankings, performance analytics, and predictive insights for fantasy football and player awards.',
+    image: '/projects/laliga-tierlist.png',
+    tags: ['Python', 'Streamlit', 'Data Science', 'Machine Learning', 'Sports Analytics'],
+    demoUrl: 'https://laligatiersapp.streamlit.app/',
+    githubUrl: 'https://github.com/ayaan-cs/LaLigaTL',
+    slug: 'laliga-tierlist',
+    icon: <BarChart size={24} />,
+    color: 'from-green-500 to-emerald-500'
   },
 ];
 
