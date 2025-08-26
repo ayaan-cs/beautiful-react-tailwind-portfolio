@@ -167,7 +167,7 @@ export const ProjectsSection = () => {
             <div className="flex flex-wrap justify-center gap-4">
               <span className="px-3 py-1 text-sm bg-primary/10 text-primary rounded-full">Esports AI Assistant</span>
               <span className="px-3 py-1 text-sm bg-primary/10 text-primary rounded-full">PeerScribe Platform</span>
-              <span className="px-3 py-1 text-sm bg-primary/10 text-primary rounded-full">Climate Prediction Model</span>
+              <span className="px-3 py-1 text-sm bg-primary/10 text-primary rounded-full">Kashf - Muslim Map for TX</span>
               <span className="px-3 py-1 text-sm bg-primary/10 text-primary rounded-full">Fiji Water Monitoring</span>
             </div>
           </div>
