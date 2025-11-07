@@ -3,8 +3,10 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { NotFound } from "./pages/NotFound";
 import { SentinelAIDetailPage } from "./pages/projects/SentinelAIDetailPage";
+import { MusicSentimentAnalyzerDetailPage } from "./pages/projects/MusicSentimentAnalyzerDetailPage";
 import { MindSightDetailPage } from "./pages/projects/MindSightDetailPage";
 import { LaLigaTierListDetailPage } from "./pages/projects/LaLigaTierListDetailPage";
+import { IMDBSentimentDetailPage } from "./pages/projects/IMDBSentimentDetailPage";
 import { Toaster } from "@/components/ui/toaster";
 import { StartupAnimation } from "./components/StartupAnimation";
 
@@ -67,8 +69,10 @@ function App() {
                     <Routes>
                         <Route index element={<Home />} />
                         <Route path="/projects/sentinelai" element={<SentinelAIDetailPage />} />
+                        <Route path="/projects/music-sentiment-analyzer" element={<MusicSentimentAnalyzerDetailPage />} />
                         <Route path="/projects/mindsight" element={<MindSightDetailPage />} />
                         <Route path="/projects/laliga-tierlist" element={<LaLigaTierListDetailPage />} />
+                        <Route path="/projects/imdb-sentiment" element={<IMDBSentimentDetailPage />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </BrowserRouter>
