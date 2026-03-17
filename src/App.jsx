@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { NotFound } from "./pages/NotFound";
 import { SentinelAIDetailPage } from "./pages/projects/SentinelAIDetailPage";
@@ -7,8 +7,20 @@ import { MusicSentimentAnalyzerDetailPage } from "./pages/projects/MusicSentimen
 import { MindSightDetailPage } from "./pages/projects/MindSightDetailPage";
 import { LaLigaTierListDetailPage } from "./pages/projects/LaLigaTierListDetailPage";
 import { IMDBSentimentDetailPage } from "./pages/projects/IMDBSentimentDetailPage";
+import { AllSkillsPage } from "./pages/AllSkillsPage";
 import { Toaster } from "@/components/ui/toaster";
 import { StartupAnimation } from "./components/StartupAnimation";
+
+// Scroll to top on route change
+const ScrollToTop = () => {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
+};
 
 function App() {
     const [showStartup, setShowStartup] = useState(true);
@@ -66,8 +78,10 @@ function App() {
             {/* Main application */}
             {!showStartup && (
                 <BrowserRouter>
+                    <ScrollToTop />
                     <Routes>
                         <Route index element={<Home />} />
+                        <Route path="/skills" element={<AllSkillsPage />} />
                         <Route path="/projects/sentinelai" element={<SentinelAIDetailPage />} />
                         <Route path="/projects/music-sentiment-analyzer" element={<MusicSentimentAnalyzerDetailPage />} />
                         <Route path="/projects/mindsight" element={<MindSightDetailPage />} />

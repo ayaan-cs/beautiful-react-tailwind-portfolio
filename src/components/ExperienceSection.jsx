@@ -3,15 +3,29 @@ import { useState } from "react";
 
 const experiences = [
     {
+        id: 'samsung-manufacturing-tech',
+        title: 'Manufacturing Technician',
+        company: 'Samsung Austin Semiconductor',
+        type: 'Full-time',
+        period: 'Feb 2026 - Current',
+        location: 'Austin, TX',
+        description:
+            'Operate, maintain, and troubleshoot advanced semiconductor production equipment in a high-volume cleanroom environment. Perform preventive maintenance, monitor tool performance, and analyze production data to optimize yield while following strict safety and quality protocols. Role is based on 12-hour compressed overnight shifts, demonstrating flexibility for any shift schedule and full-time workload, while leveraging Microsoft 365 tools for documentation, reporting, and analysis.',
+        icon: <Briefcase className="h-6 w-6" />,
+        logo: '/assets/samsung-logo.svg',
+        color: 'from-blue-600 to-blue-700'
+    },
+    {
         id: 'ai-lead',
         title: 'AI Research Lead',
         company: 'Klein Sports Performance, LLC',
         type: 'Internship/Research',
         period: 'Sep 2024 - August 2025',
-        location: 'Austin, TX',
+        location: 'Remote, based in Austin, TX',
         description: 'Lead researcher for the AI component of a fitness app, responsible for developing machine learning algorithms to learn 100+ workouts, personalize workouts, and analyze user performance. Collaborated with data science/development teams to feed our ChatBot information across 20+ studies, optimizing feedback and enhancing user fitness outcomes through tailored insights.',
         icon: <Brain className="h-6 w-6" />,
-        color: 'from-purple-500 to-blue-500'
+        logo: '/assets/klein-logo.png',
+        color: 'from-slate-900 to-red-600'
     },
     {
         id: 'data-scientist',
@@ -19,21 +33,38 @@ const experiences = [
         company: 'USDA Forest Service',
         type: 'Internship',
         period: 'Jun 2024 - Aug 2024',
-        location: 'Austin, TX',
+        location: 'Remote, based in Austin, TX',
         description: 'My role comprised two main projects. I developed a data science solution using Google Earth Engine to monitor water quality in Fiji, applying different indices for detecting pollution and analyzing seasonal trends. The other involved Land Use Land Cover (LULC) for Fiji. My job was to photo-interpret sample plots of land, write R scripts for the interpretations\' accuracy, and compile my data for the 2021-2022 reporting period.',
         icon: <Database className="h-6 w-6" />,
-        color: 'from-green-500 to-teal-500'
+        logo: '/assets/usda-logo.svg',
+        color: 'from-green-700 to-yellow-500'
     },
     {
-        id: 'retail-sales',
-        title: 'Retail Sales Representative',
+        id: 'heb-multi-role',
         company: 'H-E-B',
-        type: 'Part-time',
-        period: 'Apr 2023 - Current',
-        location: 'Austin, TX',
-        description: 'Perishables associate representative that overlooks the floor of the department, making sure that all items are stocked and that premium customer service is provided. Also trained and experienced with the preparation of in-store items and organization of the storage area with power tools.',
         icon: <Briefcase className="h-6 w-6" />,
-        color: 'from-red-500 to-red-700'
+        logo: '/assets/heb-logo.svg',
+        color: 'from-red-600 to-red-800',
+        roles: [
+            {
+                id: 'heb-swe-intern',
+                title: 'Software Engineering Intern',
+                type: 'Internship',
+                period: 'May 2026 - Aug 2026',
+                location: 'Austin, TX',
+                description:
+                    'Software engineering internship on H-E-B Digital\'s AI Platform team, focused on building infrastructure, microservices, and automation tools that power machine learning and real-time decision-making across retail, supply chain, and e-commerce. Applied an MLOps mindset to support model training, deployment, and monitoring, contributed to cloud infrastructure and CI/CD automation, and collaborated with data scientists and engineers to ship production-ready AI features that improve customer and Partner experiences.'
+            },
+            {
+                id: 'retail-sales',
+                title: 'Retail Sales Representative',
+                type: 'Part-time',
+                period: 'Apr 2023 - May 2026',
+                location: 'Austin, TX',
+                description:
+                    'Perishables associate representative that overlooks the floor of the department, making sure that all items are stocked and that premium customer service is provided. Also trained and experienced with the preparation of in-store items and organization of the storage area with power tools.'
+            }
+        ]
     }
 ];
 
@@ -65,42 +96,95 @@ export const ExperienceSection = () => {
 
                             <div className="p-8">
                                 <div className="flex flex-col md:flex-row md:items-start gap-6">
-                                    {/* Icon */}
-                                    <div className={`p-4 rounded-full bg-gradient-to-r ${exp.color} bg-opacity-10 flex-shrink-0`}>
-                                        <div className="text-primary">
-                                            {exp.icon}
-                                        </div>
+                                    {/* Icon / Logo */}
+                                    <div className="p-0 flex-shrink-0 flex items-center justify-center">
+                                        {exp.logo ? (
+                                            <img
+                                                src={exp.logo}
+                                                alt={`${exp.company} logo`}
+                                                className="h-12 w-12 object-contain"
+                                            />
+                                        ) : (
+                                            <div className={`p-4 rounded-full bg-gradient-to-r ${exp.color} bg-opacity-10 text-primary`}>
+                                                {exp.icon}
+                                            </div>
+                                        )}
                                     </div>
 
                                     {/* Content */}
                                     <div className="flex-1">
-                                        <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
-                                            <div>
-                                                <h3 className="text-xl font-semibold text-foreground mb-1">
-                                                    {exp.title}
-                                                </h3>
-                                                <p className="text-primary font-medium">{exp.company}</p>
-                                                <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary mt-2">
-                          {exp.type}
-                        </span>
-                                            </div>
+                                        {/* Single-role experience */}
+                                        {!exp.roles && (
+                                            <>
+                                                <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
+                                                    <div>
+                                                        <h3 className="text-xl font-semibold text-foreground mb-1">
+                                                            {exp.title}
+                                                        </h3>
+                                                        <p className="text-primary font-medium">{exp.company}</p>
+                                                        <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary mt-2">
+                                                            {exp.type}
+                                                        </span>
+                                                    </div>
 
-                                            <div className="mt-4 md:mt-0 md:text-right">
-                                                <div className="flex items-center md:justify-end text-muted-foreground mb-2">
-                                                    <Calendar size={16} className="mr-2" />
-                                                    <span className="text-sm">{exp.period}</span>
+                                                    <div className="mt-4 md:mt-0 md:text-right">
+                                                        <div className="flex items-center md:justify-end text-muted-foreground mb-2">
+                                                            <Calendar size={16} className="mr-2" />
+                                                            <span className="text-sm">{exp.period}</span>
+                                                        </div>
+                                                        <div className="flex items-center md:justify-end text-muted-foreground">
+                                                            <MapPin size={16} className="mr-2" />
+                                                            <span className="text-sm">{exp.location}</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div className="flex items-center md:justify-end text-muted-foreground">
-                                                    <MapPin size={16} className="mr-2" />
-                                                    <span className="text-sm">{exp.location}</span>
-                                                </div>
-                                            </div>
-                                        </div>
 
-                                        {/* Description */}
-                                        <div className="text-muted-foreground leading-relaxed">
-                                            <p>{exp.description}</p>
-                                        </div>
+                                                <div className="text-muted-foreground leading-relaxed">
+                                                    <p>{exp.description}</p>
+                                                </div>
+                                            </>
+                                        )}
+
+                                        {/* Multi-role experience (e.g., H-E-B) */}
+                                        {exp.roles && (
+                                            <div className="space-y-6">
+                                                {exp.roles.map((role, idx) => (
+                                                    <div key={role.id}>
+                                                        <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-2">
+                                                            <div>
+                                                                <h3 className="text-xl font-semibold text-foreground mb-1">
+                                                                    {role.title}
+                                                                </h3>
+                                                                <p className="text-primary font-medium">{exp.company}</p>
+                                                                <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary mt-2">
+                                                                    {role.type}
+                                                                </span>
+                                                            </div>
+
+                                                            <div className="mt-4 md:mt-0 md:text-right">
+                                                                <div className="flex items-center md:justify-end text-muted-foreground mb-2">
+                                                                    <Calendar size={16} className="mr-2" />
+                                                                    <span className="text-sm">{role.period}</span>
+                                                                </div>
+                                                                <div className="flex items-center md:justify-end text-muted-foreground">
+                                                                    <MapPin size={16} className="mr-2" />
+                                                                    <span className="text-sm">{role.location}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="text-muted-foreground leading-relaxed">
+                                                            <p>{role.description}</p>
+                                                        </div>
+
+                                                        {/* Divider between roles */}
+                                                        {idx < exp.roles.length - 1 && (
+                                                            <div className="my-4 border-t border-border opacity-60" />
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

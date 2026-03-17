@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import {
   Code, Database, Terminal, Globe, LineChart, Brain,
@@ -20,7 +21,7 @@ const skills = [
     level: 85,
     category: 'programming',
     icon: <Code size={20} />,
-    yearsExperience: 4,
+    yearsExperience: 3,
     description: 'Object-oriented programming, Android development, and enterprise applications.'
   },
   {
@@ -62,7 +63,7 @@ const skills = [
     level: 90,
     category: 'web-development',
     icon: <Layout size={20} />,
-    yearsExperience: 3,
+    yearsExperience: 4,
     description: 'Semantic HTML, responsive design, CSS Grid/Flexbox, and modern styling techniques.'
   },
   {
@@ -152,6 +153,14 @@ const skills = [
     description: 'Cloud infrastructure including EC2, S3, Lambda, SageMaker, and other AWS services.'
   },
   {
+    name: 'Google Cloud Platform (GCP)',
+    level: 75,
+    category: 'cloud',
+    icon: <Cloud size={20} />,
+    yearsExperience: 1,
+    description: 'Designing and operating cloud infrastructure and AI workloads on GCP, including managed services and CI/CD-integrated deployments.'
+  },
+  {
     name: 'Docker',
     level: 70,
     category: 'cloud',
@@ -210,6 +219,110 @@ const skills = [
     icon: <Terminal size={20} />,
     yearsExperience: 5,
     description: 'Advanced IDE usage with extensions and customizations for efficient development.'
+  },
+  {
+    name: 'CI/CD',
+    level: 80,
+    category: 'tools',
+    icon: <Terminal size={20} />,
+    yearsExperience: 2,
+    description: 'Continuous integration and delivery pipelines for automated testing, deployment, and quality gates across services and ML workloads.'
+  },
+  {
+    name: 'MLOps',
+    level: 80,
+    category: 'ai-ml',
+    icon: <Brain size={20} />,
+    yearsExperience: 2,
+    description: 'End-to-end machine learning lifecycle management, including reproducible training, deployment, monitoring, and automation for production models.'
+  },
+  {
+    name: 'Model Monitoring',
+    level: 75,
+    category: 'ai-ml',
+    icon: <LineChart size={20} />,
+    yearsExperience: 1,
+    description: 'Tracking model performance and data quality in production, detecting drift, and closing the loop with retraining workflows.'
+  },
+  {
+    name: 'Infrastructure as Code (Terraform)',
+    level: 70,
+    category: 'cloud',
+    icon: <Code size={20} />,
+    yearsExperience: 1,
+    description: 'Defining and managing cloud infrastructure using Terraform and IaC best practices for repeatable, version-controlled environments.'
+  },
+  {
+    name: 'Observability & Monitoring',
+    level: 75,
+    category: 'tools',
+    icon: <BarChart size={20} />,
+    yearsExperience: 2,
+    description: 'Instrumenting applications and services with logging, metrics, and dashboards to monitor health, performance, and anomalies.'
+  },
+  {
+    name: 'REST API Design',
+    level: 85,
+    category: 'programming',
+    icon: <Code size={20} />,
+    yearsExperience: 3,
+    description: 'Designing and implementing RESTful APIs with clear contracts, authentication, and pagination for data-rich applications.'
+  },
+  {
+    name: 'Flask/FastAPI',
+    level: 80,
+    category: 'programming',
+    icon: <Terminal size={20} />,
+    yearsExperience: 2,
+    description: 'Building backend services and ML inference APIs in Python using Flask and FastAPI, including routing, validation, and deployment.'
+  },
+  {
+    name: 'Node.js',
+    level: 70,
+    category: 'programming',
+    icon: <Terminal size={20} />,
+    yearsExperience: 2,
+    description: 'Developing JavaScript/TypeScript backend services and utilities using the Node.js runtime and its ecosystem.'
+  },
+  {
+    name: 'Jupyter Notebooks',
+    level: 90,
+    category: 'data-science',
+    icon: <Terminal size={20} />,
+    yearsExperience: 4,
+    description: 'Exploratory data analysis, experimentation, and reporting using Jupyter Notebooks for data science and ML workflows.'
+  },
+  {
+    name: 'Microsoft 365',
+    level: 85,
+    category: 'tools',
+    icon: <Layout size={20} />,
+    yearsExperience: 4,
+    description: 'Using Excel, PowerPoint, Word, and related tools for documentation, analysis, and communication in technical projects and operations.'
+  },
+  {
+    name: 'Cross-functional Collaboration',
+    level: 85,
+    category: 'tools',
+    icon: <Globe size={20} />,
+    yearsExperience: 3,
+    description: 'Partnering with data scientists, engineers, product managers, and domain experts to deliver end-to-end technical solutions.'
+  },
+  {
+    name: 'Technical Communication',
+    level: 90,
+    category: 'tools',
+    icon: <Globe size={20} />,
+    yearsExperience: 4,
+    description: 'Explaining complex technical concepts to both technical and non-technical stakeholders through writing, presentations, and demos.'
+  },
+  {
+    name: 'Mentoring & Peer Support',
+    level: 80,
+    category: 'tools',
+    icon: <Brain size={20} />,
+    yearsExperience: 2,
+    description: 'Supporting peers and students through tutoring, code reviews, and guidance on best practices in software and data projects.'
   }
 ];
 
@@ -282,14 +395,36 @@ export const SkillsSection = () => {
   const [activeCategory, setActiveCategory] = useState("all");
   const [expandedSkill, setExpandedSkill] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
-  const filteredSkills = skills
-      .filter(skill => activeCategory === "all" || skill.category === activeCategory)
-      .filter(skill =>
-          skill.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          skill.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          skill.description.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+  const featuredNames = new Set(["Python", "HTML/CSS", "JavaScript", "TypeScript", "R", "React"]);
+  const isAllSkillsPage = window.location.pathname === "/skills";
+
+  // Increase years of experience for all skills by 1
+  const adjustedSkills = skills.map((skill) => ({
+    ...skill,
+    yearsExperience: skill.yearsExperience + 1,
+  }));
+
+  // Sort skills by yearsExperience (desc), then name (asc)
+  const sortedSkills = [...adjustedSkills].sort((a, b) => {
+    if (b.yearsExperience !== a.yearsExperience) {
+      return b.yearsExperience - a.yearsExperience;
+    }
+    return a.name.localeCompare(b.name);
+  });
+
+  const baseList = isAllSkillsPage
+    ? sortedSkills
+    : sortedSkills.filter((skill) => featuredNames.has(skill.name));
+
+  const filteredSkills = baseList
+    .filter((skill) => activeCategory === "all" || skill.category === activeCategory)
+    .filter((skill) =>
+      skill.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      skill.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      skill.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
   const toggleSkillExpand = (skillName) => {
     setExpandedSkill(expandedSkill === skillName ? null : skillName);
@@ -321,33 +456,35 @@ export const SkillsSection = () => {
             </div>
           </div>
 
-          {/* Category Filters */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {categories.map((category) => (
+          {/* Category Filters (only on full skills page) */}
+          {isAllSkillsPage && (
+            <div className="flex flex-wrap justify-center gap-3 mb-12">
+              {categories.map((category) => (
                 <button
-                    key={category.id}
-                    onClick={() => setActiveCategory(category.id)}
-                    className={cn(
-                        "px-5 py-2 rounded-full transition-all duration-300 capitalize",
-                        activeCategory === category.id
-                            ? "cosmic-button"
-                            : "bg-secondary/70 text-foreground hover:bg-secondary border border-border"
-                    )}
+                  key={category.id}
+                  onClick={() => setActiveCategory(category.id)}
+                  className={cn(
+                    "px-5 py-2 rounded-full transition-all duration-300 capitalize",
+                    activeCategory === category.id
+                      ? "cosmic-button"
+                      : "bg-secondary/70 text-foreground hover:bg-secondary border border-border"
+                  )}
                 >
                   {category.name}
                 </button>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           {/* Skills Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredSkills.map((skill) => (
-                <SkillCard
-                    key={skill.name}
-                    skill={skill}
-                    isExpanded={expandedSkill === skill.name}
-                    toggleExpand={() => toggleSkillExpand(skill.name)}
-                />
+              <SkillCard
+                key={skill.name}
+                skill={skill}
+                isExpanded={expandedSkill === skill.name}
+                toggleExpand={() => toggleSkillExpand(skill.name)}
+              />
             ))}
           </div>
 
@@ -357,6 +494,18 @@ export const SkillsSection = () => {
                 <Search size={48} className="mx-auto mb-4 opacity-50" />
                 <p>No skills match your search criteria.</p>
               </div>
+          )}
+
+          {/* See all skills button on home page */}
+          {!isAllSkillsPage && (
+            <div className="mt-10 text-center">
+              <button
+                onClick={() => navigate("/skills")}
+                className="cosmic-button inline-flex items-center justify-center px-6 py-3"
+              >
+                See all skills
+              </button>
+            </div>
           )}
 
           {/* Languages Section */}

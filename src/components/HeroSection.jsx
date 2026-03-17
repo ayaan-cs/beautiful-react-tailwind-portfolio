@@ -23,7 +23,7 @@ export const HeroSection = () => {
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto animate-[fade-in_0.7s_ease-out_0.6s_forwards]">
-              Computer Information Science student passionate about AI, software development,
+              Computer Information Science graduate passionate about AI, software development,
               and data science. I create innovative solutions with cutting-edge technologies.
             </p>
 

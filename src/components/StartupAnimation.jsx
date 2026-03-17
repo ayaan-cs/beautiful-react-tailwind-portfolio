@@ -92,6 +92,8 @@ export const StartupAnimation = ({ onAnimationComplete }) => {
 
     // Sound effects generator with user interaction check
     const playSound = (type) => {
+        // Sound disabled by user preference
+        return;
         try {
             if (!audioContextRef.current) {
                 audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();

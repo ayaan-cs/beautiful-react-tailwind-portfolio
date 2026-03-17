@@ -15,18 +15,18 @@ export const AboutSection = () => {
               </h3>
 
               <p className="text-muted-foreground">
-                I'm a Computer Information Science student at St. Edwards University with a passion for technology and innovation.
+                I'm a Computer Information Science graduate at St. Edwards University with a passion for technology and innovation.
                 My expertise spans software development, AI, and data science, allowing me to develop customized solutions for complex problems.
               </p>
 
               <p className="text-muted-foreground">
-                I'm skilled in collaborating with stakeholders and translating client needs into technical solutions using my programming expertise
-                in Python, Java, and AWS services. I have experience in AI-driven applications, cloud computing, and full-stack development.
+                I have experience and skills in collaborating with stakeholders and translating client needs into technical solutions using my programming expertise
+                in several programming languages and frameworks, including Python, TypeScript, and more. I have experience in AI-driven applications, cloud computing, and full-stack development.
               </p>
 
               <p className="text-muted-foreground">
-                I speak and write in English and Urdu, and I am experienced in Hindi. When I'm not coding, I am listening to music, cooking new dishes,
-                tutoring fellow students, or volunteering as an Animal Caretaker,
+                I am a native to English, with proficiency in Urdu and Hindi. I am a U.S citizen have no need for a visa. When I'm not coding, I am listening to music, cooking new dishes,
+                tutoring fellow students, involving myself in the mosque as a volunteer, or volunteering as an Animal Caretaker,
                 providing care for animals and ensuring their well-being.
               </p>
             </div>
@@ -107,7 +107,7 @@ export const AboutSection = () => {
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-muted-foreground">
                   <div className="flex items-center">
                     <Calendar size={16} className="mr-2" />
-                    <span>August 2022 - Current</span>
+                    <span>August 2022 - December 2025</span>
                   </div>
                   <div className="flex items-center">
                     <MapPin size={16} className="mr-2" />
@@ -122,12 +122,14 @@ export const AboutSection = () => {
                   <h5 className="font-semibold text-foreground mb-2">Relevant Coursework</h5>
                   <p className="text-muted-foreground text-sm">
                     Concepts I & II, Algorithmic Problem Solving, Computation-Based Programming, Web Development,
-                    Computer Architecture, Data Structures, Intro to AI, Database Theory, Software Engineering
+                    Computer Architecture, Data Structures, Intro to AI, Database Theory, Software Engineering,
+                    Senior Undergraduate Research
                   </p>
                 </div>
                 <div>
                   <h5 className="font-semibold text-foreground mb-2">Honors & Awards</h5>
                   <p className="text-muted-foreground text-sm">President's Achievement Scholarship</p>
+                  <p className="text-muted-foreground text-sm">Cum Laude Graduate</p>
                 </div>
               </div>
             </div>
