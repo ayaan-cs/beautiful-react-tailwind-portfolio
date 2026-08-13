@@ -1,44 +1,42 @@
 import { ArrowDown } from "lucide-react";
+import { profile } from "@/content/profile";
 
 export const HeroSection = () => {
+  const [lead, verb, rest] = profile.headline;
+
   return (
-      <section
-          id="hero"
-          className="relative min-h-screen flex flex-col items-center justify-center px-4"
-      >
-        <div className="container max-w-4xl mx-auto text-center z-10">
-          <div className="space-y-6">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-              <span className="inline-block animate-[fade-in_0.7s_ease-out_forwards]">Hi, I'm</span>
-              {" "}
-              <span className="text-primary inline-block animate-[fade-in_0.7s_ease-out_0.2s_forwards]">
-                Ayaan
-              </span>
-              {" "}
-              <span className="inline-block animate-[fade-in_0.7s_ease-out_0.4s_forwards]">
-                <span className="bg-gradient-to-r from-primary via-primary to-primary bg-clip-text text-transparent">
-                  Syed
-                </span>
-              </span>
-            </h1>
-
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto animate-[fade-in_0.7s_ease-out_0.6s_forwards]">
-              Computer Information Science graduate passionate about AI, software development,
-              and data science. I create innovative solutions with cutting-edge technologies.
-            </p>
-
-            <div className="pt-4 animate-[fade-in_0.7s_ease-out_0.8s_forwards]">
-              <a href="#projects" className="cosmic-button">
-                View My Work
+    <section id="hero" className="relative min-h-[100svh] flex flex-col justify-center pt-24 pb-16">
+      <div className="container-page">
+        <p className="text-xs uppercase tracking-[0.18em] text-muted mb-6">{profile.eyebrow}</p>
+        <h1 className="text-[clamp(2.4rem,6vw,4.25rem)] font-semibold max-w-4xl">
+          {lead}{" "}
+          <span className="text-gradient">{verb}</span>{" "}
+          {rest}
+        </h1>
+        <p className="mt-6 max-w-2xl text-lg text-muted">{profile.lede}</p>
+        <div className="mt-8 flex flex-wrap gap-2">
+          {profile.tags.map((tag) => (
+            <span key={tag} className="chip">{tag}</span>
+          ))}
+        </div>
+        <div className="mt-10 flex flex-wrap gap-3">
+          {profile.ctas.map((cta) =>
+            cta.external ? (
+              <a key={cta.label} href={cta.href} target="_blank" rel="noreferrer" className="ghost-button">
+                {cta.label}
               </a>
-            </div>
-          </div>
+            ) : (
+              <a key={cta.label} href={cta.href} className={cta.primary ? "cosmic-button" : "ghost-button"}>
+                {cta.label}
+              </a>
+            )
+          )}
         </div>
-
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce">
-          <span className="text-sm text-muted-foreground mb-2">Scroll</span>
-          <ArrowDown className="h-5 w-5 text-primary" />
-        </div>
-      </section>
+      </div>
+      <a href="#proof" className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-muted text-xs">
+        Scroll
+        <ArrowDown className="h-4 w-4 mt-1 text-primary" />
+      </a>
+    </section>
   );
 };

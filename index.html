@@ -2,9 +2,32 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      if (localStorage.getItem("theme") !== "light") {
+        document.documentElement.classList.add("dark");
+      }
+    </script>
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ayaan's Portfolio</title>
+    <title>Ayaan Syed — Applied AI</title>
+    <meta
+      name="description"
+      content="Portfolio of Ayaan Syed, Computer Information Science graduate in Austin. Live ML demos, model cards, and scores shown next to their baselines."
+    />
+    <link rel="canonical" href="https://ayaansportfolio.netlify.app/" />
+    <meta property="og:title" content="Ayaan Syed — Applied AI" />
+    <meta
+      property="og:description"
+      content="End-to-end ML and software with public demos. Every headline number has a baseline."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ayaansportfolio.netlify.app/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div id="root"></div>

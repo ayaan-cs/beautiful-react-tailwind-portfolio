@@ -1,0 +1,292 @@
+export const projects = [
+  {
+    slug: "sentinelai",
+    title: "SentinelAI",
+    kicker: "Cybersecurity · flagship demo",
+    role: "Independent project · live Streamlit app",
+    state: "live",
+    featured: true,
+    summary:
+      "Unsupervised network-intrusion demo: Isolation Forest, One-Class SVM, and DBSCAN on flow features, with an explainability layer for why a flow was flagged.",
+    metrics: [
+      { label: "Models", value: "3-model ensemble", measured: true },
+      { label: "Flow features", value: "20+", measured: true },
+      { label: "Data", value: "Synthetic flows", benchmark: "not a SOC trace", measured: true },
+    ],
+    stack: ["Python", "scikit-learn", "Streamlit", "Altair"],
+    repo: "https://github.com/ayaan-cs/SentinelAI",
+    demo: "https://sentinelaiapp.streamlit.app/",
+    neverClaim: [
+      "No published AUC, F1, or production false-positive rate.",
+      "Flows are generated (Faker is a dependency), not captured from a live network.",
+    ],
+    modelCard: {
+      problem: "Flag suspicious network flows without a large labelled attack set.",
+      data: "Synthetic / generated flow records with 20+ engineered characteristics. Not a public IDS benchmark (CIC-IDS, UNSW-NB15) eval in the README.",
+      models: "Isolation Forest, One-Class SVM, DBSCAN in an ensemble. Unsupervised and semi-supervised scoring, not a supervised CNN/LSTM IDS.",
+      metrics: "Interactive dashboard and anomaly scores. No holdout table shipped as a headline number.",
+      validation: "Qualitative attack-pattern demos (port scan, brute force, exfil, DoS) in the UI.",
+      limitations: "Synthetic data. Unsupervised scores are not calibrated probabilities. Not deployed in a SOC.",
+      wouldNotClaim: "Zero-day detection in the wild, millisecond production SLAs, or superiority to Snort/Suricata on a named dataset.",
+    },
+    narrative: [
+      "SentinelAI is the project I point people at when they want to click something. It is a Streamlit console that scores network flows with three unsupervised models and tries to explain the flag in plain language.",
+      "The interesting design choice is the ensemble: density (Isolation Forest), margin (One-Class SVM), and clustering (DBSCAN) disagree in different ways, which is useful when you do not have labels. Feature importance is the honesty layer for an analyst, not a marketing AUC.",
+      "I would not put this on a resume as a production NIDS. I would put it as evidence that I can wire sklearn, a UI, and a threat-story together and host it.",
+    ],
+  },
+  {
+    slug: "imdb-sentiment",
+    title: "IMDB Sentiment Platform",
+    kicker: "NLP · measured comparison",
+    role: "Independent project · live Streamlit app",
+    state: "live",
+    featured: true,
+    summary:
+      "50,000 public IMDB reviews, four sklearn models, and an off-the-shelf DistilBERT. The page shows each score next to class balance, not in isolation.",
+    metrics: [
+      { label: "Best sklearn", value: "88.45% acc", benchmark: "vs ~50% baseline", measured: true },
+      { label: "ROC AUC (LR)", value: "95.52%", benchmark: "vs 0.50 chance", measured: true },
+      { label: "DistilBERT", value: "83.60% acc", benchmark: "no extra training", measured: true },
+    ],
+    stack: ["Python", "scikit-learn", "Hugging Face", "Streamlit", "NLTK"],
+    repo: "https://github.com/ayaan-cs/Movie-Review-Sentiment-Analysis-Insights-Platform",
+    demo: "https://imdbsentimentapp.streamlit.app/",
+    neverClaim: [
+      "DistilBERT was not fine-tuned on this split.",
+      "This is the public IMDB corpus, not a private studio dataset.",
+    ],
+    modelCard: {
+      problem: "Classify movie reviews as positive or negative and compare classical NLP to a small transformer.",
+      data: "50,000 IMDB reviews from Hugging Face (balanced positive/negative). TF-IDF and n-grams for sklearn; raw text for DistilBERT.",
+      models: "Logistic Regression, Naive Bayes, Random Forest, Gradient Boosting, plus DistilBERT used without additional training.",
+      metrics: "LR 88.45% accuracy / 88.35% F1 / 95.52% ROC AUC. DistilBERT 83.60% accuracy off the shelf. Full table on /playground.",
+      validation: "Standard train/test comparison across models on the same corpus. Topic modeling via LDA (5 topics) is exploratory.",
+      limitations: "English movie reviews only. DistilBERT was not fine-tuned, so beating it with TF-IDF+LR is expected, not a research result.",
+      wouldNotClaim: "SOTA on IMDB, production recommendation quality, or that transformers lost to logistic regression after proper fine-tuning.",
+    },
+    narrative: [
+      "This is the cleanest numbers page I have. The dataset is public, the classes are balanced, and every model sat on the same evaluation.",
+      "Logistic regression on TF-IDF is the winner among the models I actually trained. DistilBERT is on the board as an off-the-shelf check, not as a fine-tuned champion. That distinction matters; a reviewer who has fine-tuned BERT will smell the difference.",
+      "The Streamlit app is the delivery: confusion matrices, ROC curves, word clouds, and the model table. If you only open one demo, open this one for the scorecard habit.",
+    ],
+  },
+  {
+    slug: "mindsight",
+    title: "MindSight",
+    kicker: "Applied LLM · visualization",
+    role: "Independent project · live Netlify app",
+    state: "live",
+    featured: true,
+    summary:
+      "React dashboard that visualizes alpha/beta/theta/delta/gamma series and asks DeepSeek-R1 for a pattern read. The waves are generated, not recorded from a headset.",
+    metrics: [
+      { label: "Bands", value: "5 wave types", measured: true },
+      { label: "Model", value: "DeepSeek-R1 via HF", measured: true },
+      { label: "Signal source", value: "Synthetic series", measured: true },
+    ],
+    stack: ["React", "Recharts", "Hugging Face", "DeepSeek-R1"],
+    repo: "https://github.com/ayaan-cs/MindSight",
+    demo: "https://mindsight-app.netlify.app/",
+    neverClaim: [
+      "Not clinical EEG. Not patient data. Series are generated in the client.",
+    ],
+    modelCard: {
+      problem: "Make brain-wave frequency bands readable and attach an LLM commentary with a confidence-style score.",
+      data: "Synthetic time series for five canonical bands (alpha 8–13 Hz through gamma 30–100 Hz). No headset capture in the repo.",
+      models: "Hugging Face DeepSeek-R1 via Inference API for narrative analysis. Custom JS for the live chart.",
+      metrics: "UI confidence scores from the model response. No clinical sensitivity/specificity.",
+      validation: "Manual demo of the dashboard and export paths (CSV, JSON, PDF).",
+      limitations: "Generated signal. LLM commentary can hallucinate neural correlations. Not a medical device.",
+      wouldNotClaim: "Diagnosis, real EEG fidelity, or peer-reviewed neuroscience results.",
+    },
+    narrative: [
+      "MindSight is a product-shaped demo: a live chart, an AI panel, and export. I built it to practice React visualization plus a hosted LLM, not to read brains.",
+      "The README is explicit that data processing includes synthetic generation. I keep that on the card so a hiring manager does not think I skipped IRB.",
+    ],
+  },
+  {
+    slug: "laliga-tierlist",
+    title: "LaLiga Teams Tier List",
+    kicker: "Sports analytics · live dashboard",
+    role: "Independent project · Streamlit",
+    state: "live",
+    featured: true,
+    summary:
+      "Python + Streamlit analysis of LaLiga teams and players: performance, value, and role-specific metrics. Predictive fantasy / Ballon d'Or work is still vision, not a shipped model.",
+    metrics: [
+      { label: "Coverage", value: "20 LaLiga clubs", measured: true },
+      { label: "Interface", value: "Live Streamlit", measured: true },
+      { label: "Forecast models", value: "Not shipped", measured: true },
+    ],
+    stack: ["Python", "Pandas", "Streamlit", "Plotly"],
+    repo: "https://github.com/ayaan-cs/LaLigaTL",
+    demo: "https://laligatiersapp.streamlit.app/",
+    neverClaim: [
+      "Live match APIs, injury models, and Ballon d'Or probability are described as future work in the repo README.",
+    ],
+    modelCard: {
+      problem: "Rank LaLiga teams and players from public performance and value stats in an interactive dashboard.",
+      data: "Team and player statistics processed in Python modules (data_processor, player_analyzer, tier_calculator). Not a licensed StatsBomb/Opta feed.",
+      models: "Weighted scoring and tier bands in the current app. ML prediction modules are planned, not the live headline.",
+      metrics: "Tier lists and descriptive stats in the UI. No published Brier score or ranking accuracy vs a betting market.",
+      validation: "Manual inspection of the dashboard against known club performance. No backtest of future-match predictions.",
+      limitations: "Skeleton/analytics stage. Do not treat tiers as betting advice.",
+      wouldNotClaim: "Shipped injury-risk models, live in-play tracking, or Ballon d'Or forecasting.",
+    },
+    narrative: [
+      "I like football data and I wanted a public dashboard, not another notebook. The live app is the ranking and visualization layer.",
+      "Earlier portfolio copy over-claimed AI prediction. The repo is more honest: live data and award models are the roadmap. This rewrite matches the repo.",
+    ],
+  },
+  {
+    slug: "quanta",
+    title: "Quanta",
+    kicker: "Game + local ML tooling",
+    role: "Independent · Godot 4.7 prologue",
+    state: "in-development",
+    featured: true,
+    summary:
+      "2D pixel-art platform RPG prologue in Godot 4.7, plus Quanta Asset Studio: a local desktop companion for sprites, cleanup, and audio that writes into the game tree.",
+    metrics: [
+      { label: "Engine", value: "Godot 4.7", measured: true },
+      { label: "Companion", value: "Local Asset Studio", measured: true },
+      { label: "Inference", value: "On-device only", measured: true },
+    ],
+    stack: ["Godot", "Python", "PyTorch", "uv"],
+    repo: "https://github.com/ayaan-cs/Quanta",
+    neverClaim: [
+      "Not a shipped commercial title. Models stay local; no API keys in the threat model.",
+    ],
+    modelCard: {
+      problem: "Build a vertical-slice prologue and a local pipeline that can generate and clean pixel assets without uploading a game tree to a vendor API.",
+      data: "Kenney and other licensed packs under game/assets; generated assets inherit the licenses of the models you download (SDXL, LoRAs, MusicGen).",
+      models: "Optional local PyTorch/CUDA stack in Asset Studio. Safetensors preferred. See SECURITY.md in the repo.",
+      metrics: "Engineering artefacts (tests, ruff/black/mypy) rather than player-retention numbers. No public playable web build advertised here.",
+      validation: "uv pytest in asset_assistant; Godot editor run of the Mist Courtyard prologue.",
+      limitations: "Windows-oriented studio setup, NVIDIA recommended. Prologue scope, not a full campaign.",
+      wouldNotClaim: "Steam release, multiplayer, or cloud-hosted generation.",
+    },
+    narrative: [
+      "Quanta is the latest large personal project: a game and the tool that feeds it. The interesting bit for a software reader is the local-only threat model, sandboxed export paths, and the split between /game and /asset_assistant.",
+    ],
+  },
+  {
+    slug: "music-sentiment-analyzer",
+    title: "Music Sentiment Analyzer",
+    kicker: "NLP product · in development",
+    role: "Independent · Flask + IBM Watson NLU",
+    state: "in-development",
+    featured: false,
+    summary:
+      "Sentiment analysis for music-streaming reviews with IBM Watson NLU and a Flask API. Repo and hosted demo are not public yet.",
+    metrics: [
+      { label: "Status", value: "Coming soon", measured: false },
+    ],
+    stack: ["Python", "Flask", "IBM Watson NLU", "SQLite"],
+    neverClaim: ["No public GitHub URL or live demo until they exist."],
+    modelCard: {
+      problem: "Turn unstructured streaming-service reviews into sentiment and theme summaries for a product team.",
+      data: "Intended: customer review text. Not yet a public dataset card.",
+      models: "IBM Watson NLU for sentiment/entities, Flask API, Chart.js front end (as designed).",
+      metrics: "None published.",
+      validation: "Not yet.",
+      limitations: "WIP. Treat this card as a design note.",
+      wouldNotClaim: "A live production integration with Spotify/Apple, or any accuracy number.",
+    },
+    narrative: [
+      "This project is on the site because the architecture is real in local work, but I will not invent a GitHub link. When the repo ships, this card gets URLs.",
+    ],
+  },
+  {
+    slug: "sv-debug-agent",
+    title: "SV Debug Agent",
+    kicker: "LLM tooling · hardware design",
+    role: "Independent · Streamlit + Gemini",
+    state: "live",
+    featured: false,
+    summary:
+      "Streamlit agent that uses Gemini to help debug SystemVerilog. Aimed at RTL students and lab workflows, not a replacement for a full EDA suite.",
+    metrics: [
+      { label: "Interface", value: "Streamlit", measured: true },
+      { label: "Model", value: "Gemini", measured: true },
+    ],
+    stack: ["Python", "Streamlit", "Gemini"],
+    repo: "https://github.com/ayaan-cs/sv-debug-agent",
+    neverClaim: ["Not a formal verification tool. LLM suggestions can be wrong; simulators still win."],
+    modelCard: {
+      problem: "Shorten the loop when a SystemVerilog snippet fails to compile or behave.",
+      data: "User-provided HDL. No proprietary foundry PDKs.",
+      models: "Google Gemini via the vendor API, wrapped in Streamlit.",
+      metrics: "Qualitative helper, no published pass-rate on a Verilog benchmark.",
+      validation: "Manual use on coursework-style modules.",
+      limitations: "Hallucinated fixes. Always re-simulate.",
+      wouldNotClaim: "Tape-out signoff, 100% bug detection, or equivalence to Synopsys/Cadence debug.",
+    },
+    narrative: [
+      "A small, recent agent: take the HDL, ask Gemini, show the answer. Useful as evidence that I can wrap a frontier model in a domain UI.",
+    ],
+  },
+  {
+    slug: "embedvista",
+    title: "EmbedVista",
+    kicker: "Embeddings · Gradio",
+    role: "Independent · semantic search explorer",
+    state: "live",
+    featured: false,
+    summary:
+      "Gradio app for semantic similarity, UMAP projections, and document NLP on top of sentence-transformers (gte-modernbert-base with a MiniLM fallback).",
+    stack: ["Python", "Gradio", "Sentence Transformers", "UMAP", "Plotly"],
+    repo: "https://github.com/ayaan-cs/EmbedVista",
+    neverClaim: ["Not an enterprise search product. Local/demo scale."],
+    modelCard: {
+      problem: "Explore embedding space and run lightweight document intelligence (similarity, summarization, Q&A) without a custom backend.",
+      data: "Bundled sample datasets plus CSV/JSON upload.",
+      models: "Alibaba-NLP/gte-modernbert-base primary; all-MiniLM-L6-v2 fallback. NLTK + sklearn for classical NLP extras.",
+      metrics: "Interactive explorer. No published retrieval nDCG.",
+      validation: "Manual Gradio runs.",
+      limitations: "In-memory / local. GPU optional.",
+      wouldNotClaim: "Production RAG accuracy or a vector-DB SaaS.",
+    },
+    narrative: [
+      "EmbedVista is the embeddings workbench: project to 2D, search by meaning, dump a report. It is a tool, not a paper.",
+    ],
+  },
+  {
+    slug: "containerguard",
+    title: "ContainerGuard",
+    kicker: "Security engineering",
+    role: "Independent · image scanner CLI",
+    state: "live",
+    featured: false,
+    summary:
+      "Python CLI that wraps container scanning (Trivy and friends) into HTML/Markdown/JSON reports with severity filters.",
+    stack: ["Python", "Docker", "Trivy"],
+    repo: "https://github.com/ayaan-cs/ContainerGuard",
+    neverClaim: ["Not a replacement for Wiz/Snyk. Depends on upstream scanners."],
+    modelCard: {
+      problem: "Give a single command that scans an image or Dockerfile and emits a readable report.",
+      data: "Target image/Dockerfile plus CVE databases from the scanners you install.",
+      models: "None. Rule and CVE matching via Trivy/Grype-style tools.",
+      metrics: "Report artefacts, not an ML score.",
+      validation: "CLI against local images.",
+      limitations: "Scanner coverage is only as good as the tools installed.",
+      wouldNotClaim: "Zero-day container exploits or a hosted security platform.",
+    },
+    narrative: [
+      "ContainerGuard is engineering, not ML: glue the scanners, filter severity, write the report. It belongs here so the portfolio is not only notebooks.",
+    ],
+  },
+];
+
+export const getProject = (slug) => projects.find((project) => project.slug === slug);
+
+export const featuredProjects = projects.filter((project) => project.featured);
+
+export const projectRedirects = {
+  sentinelai: "sentinelai",
+  "music-sentiment-analyzer": "music-sentiment-analyzer",
+  mindsight: "mindsight",
+  "laliga-tierlist": "laliga-tierlist",
+  "imdb-sentiment": "imdb-sentiment",
+};
