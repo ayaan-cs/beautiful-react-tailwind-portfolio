@@ -1,40 +1,67 @@
-import { Navbar } from "../components/Navbar";
-import { ThemeToggle } from "../components/ThemeToggle";
-import { StarBackground } from "@/components/StarBackground";
-import { HeroSection } from "../components/HeroSection";
-import { AboutSection } from "../components/AboutSection";
-import { ExperienceSection } from "../components/ExperienceSection";
-import { SkillsSection } from "../components/SkillsSection";
-import { CertificatesSection } from "../components/CertificatesSection";
-import { ProjectsSection } from "../components/ProjectsSection";
-import { ContactSection } from "../components/ContactSection";
-import { Footer } from "../components/Footer";
+import { useCallback, useEffect, useState } from "react";
+import { LayoutGroup } from "framer-motion";
+import { Header } from "../components/film/Header";
+import { HeroConstellation } from "../components/film/HeroConstellation";
+import { AboutExpanded, AboutPanel } from "../components/film/AboutPanel";
+import { StackExpanded, StackPanel } from "../components/film/StackPanel";
+import { ProjectsExpanded, ProjectsPanel } from "../components/film/ProjectsPanel";
+import { ContactBoard } from "../components/film/ContactBoard";
+import { Filmstrip } from "../components/film/Filmstrip";
+import { CommandPalette } from "../components/film/CommandPalette";
+import { useDevTime } from "../hooks/useDevTime";
+import { useMotionPref } from "../context/MotionContext";
 
 export const Home = () => {
-    return (
-        <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-            {/* Theme Toggle */}
-            <ThemeToggle />
+  const { reduced } = useMotionPref();
+  const [ready, setReady] = useState(reduced);
+  const [commandOpen, setCommandOpen] = useState(false);
+  const [expanded, setExpanded] = useState(null);
+  const clock = useDevTime(ready);
+  const readout = ready ? `dev time: ${clock}` : "initializing";
 
-            {/* Background Effects */}
-            <StarBackground />
+  useEffect(() => {
+    if (reduced) {
+      setReady(true);
+      return undefined;
+    }
+    const id = setTimeout(() => setReady(true), 750);
+    return () => clearTimeout(id);
+  }, [reduced]);
 
-            {/* Navbar */}
-            <Navbar />
+  useEffect(() => {
+    const onKey = (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setCommandOpen((open) => !open);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
-            {/* Main Content */}
-            <main>
-                <HeroSection />
-                <AboutSection />
-                <ExperienceSection />
-                <ProjectsSection />
-                <SkillsSection />
-                <CertificatesSection />
-                <ContactSection />
-            </main>
+  const onCommand = useCallback((type, target) => {
+    if (type === "goto") {
+      setExpanded(null);
+      requestAnimationFrame(() => document.getElementById(target)?.scrollIntoView({ behavior: reduced ? "auto" : "smooth" }));
+    }
+    if (type === "expand") setExpanded(target);
+  }, [reduced]);
 
-            {/* Footer */}
-            <Footer />
-        </div>
-    );
+  return (
+    <LayoutGroup>
+      <Header readout={readout} onOpenCommand={() => setCommandOpen(true)} />
+      <CommandPalette open={commandOpen} onClose={() => setCommandOpen(false)} onCommand={onCommand} />
+      <HeroConstellation ready={ready} />
+      <div className="relative">
+        <Filmstrip />
+        {expanded !== "about" && <AboutPanel onExpand={() => setExpanded("about")} />}
+        {expanded !== "stack" && <StackPanel onExpand={() => setExpanded("stack")} />}
+      </div>
+      {expanded !== "projects" && <ProjectsPanel onExpand={() => setExpanded("projects")} />}
+      <ContactBoard />
+      {expanded === "about" && <AboutExpanded onClose={() => setExpanded(null)} />}
+      {expanded === "stack" && <StackExpanded onClose={() => setExpanded(null)} />}
+      {expanded === "projects" && <ProjectsExpanded onClose={() => setExpanded(null)} />}
+    </LayoutGroup>
+  );
 };
