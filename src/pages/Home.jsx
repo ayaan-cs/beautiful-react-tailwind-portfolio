@@ -1,39 +1,67 @@
-import { HeroSection } from "../components/HeroSection";
-import { ProofStrip } from "../components/ProofStrip";
-import { FeaturedWork } from "../components/ProjectsSection";
-import { MethodSection } from "../components/MethodSection";
-import { SkillsSection } from "../components/SkillsSection";
-import { ExperienceSection } from "../components/ExperienceSection";
-import { AboutSection } from "../components/AboutSection";
-import { CertificatesSection } from "../components/CertificatesSection";
-import { ContactSection } from "../components/ContactSection";
-import { SiteLayout } from "../components/SiteLayout";
-import { Link } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { LayoutGroup } from "framer-motion";
+import { Header } from "../components/film/Header";
+import { HeroConstellation } from "../components/film/HeroConstellation";
+import { AboutExpanded, AboutPanel } from "../components/film/AboutPanel";
+import { StackExpanded, StackPanel } from "../components/film/StackPanel";
+import { ProjectsExpanded, ProjectsPanel } from "../components/film/ProjectsPanel";
+import { ContactBoard } from "../components/film/ContactBoard";
+import { Filmstrip } from "../components/film/Filmstrip";
+import { CommandPalette } from "../components/film/CommandPalette";
+import { useDevTime } from "../hooks/useDevTime";
+import { useMotionPref } from "../context/MotionContext";
 
-export const Home = ({ onOpenCommand }) => {
+export const Home = () => {
+  const { reduced } = useMotionPref();
+  const [ready, setReady] = useState(reduced);
+  const [commandOpen, setCommandOpen] = useState(false);
+  const [expanded, setExpanded] = useState(null);
+  const clock = useDevTime(ready);
+  const readout = ready ? `dev time: ${clock}` : "initializing";
+
+  useEffect(() => {
+    if (reduced) {
+      setReady(true);
+      return undefined;
+    }
+    const id = setTimeout(() => setReady(true), 750);
+    return () => clearTimeout(id);
+  }, [reduced]);
+
+  useEffect(() => {
+    const onKey = (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setCommandOpen((open) => !open);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const onCommand = useCallback((type, target) => {
+    if (type === "goto") {
+      setExpanded(null);
+      requestAnimationFrame(() => document.getElementById(target)?.scrollIntoView({ behavior: reduced ? "auto" : "smooth" }));
+    }
+    if (type === "expand") setExpanded(target);
+  }, [reduced]);
+
   return (
-    <SiteLayout onOpenCommand={onOpenCommand}>
-      <HeroSection />
-      <ProofStrip />
-      <FeaturedWork />
-      <section className="py-16 border-y border-border">
-        <div className="container-page panel p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div>
-            <p className="text-xs uppercase tracking-[0.18em] text-muted">Playground</p>
-            <h2 className="text-2xl font-semibold mt-2">The scorecard is the first demo</h2>
-            <p className="text-muted mt-2 max-w-xl">
-              Sort every measured model. Pitch maps and uplift curves wait on real exports. I would rather ship an empty state than a fake scatterplot.
-            </p>
-          </div>
-          <Link to="/playground" className="cosmic-button">Open playground</Link>
-        </div>
-      </section>
-      <MethodSection />
-      <SkillsSection />
-      <ExperienceSection />
-      <AboutSection />
-      <CertificatesSection />
-      <ContactSection />
-    </SiteLayout>
+    <LayoutGroup>
+      <Header readout={readout} onOpenCommand={() => setCommandOpen(true)} />
+      <CommandPalette open={commandOpen} onClose={() => setCommandOpen(false)} onCommand={onCommand} />
+      <HeroConstellation ready={ready} />
+      <div className="relative">
+        <Filmstrip />
+        {expanded !== "about" && <AboutPanel onExpand={() => setExpanded("about")} />}
+        {expanded !== "stack" && <StackPanel onExpand={() => setExpanded("stack")} />}
+      </div>
+      {expanded !== "projects" && <ProjectsPanel onExpand={() => setExpanded("projects")} />}
+      <ContactBoard />
+      {expanded === "about" && <AboutExpanded onClose={() => setExpanded(null)} />}
+      {expanded === "stack" && <StackExpanded onClose={() => setExpanded(null)} />}
+      {expanded === "projects" && <ProjectsExpanded onClose={() => setExpanded(null)} />}
+    </LayoutGroup>
   );
 };
