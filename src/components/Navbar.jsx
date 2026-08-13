@@ -3,15 +3,7 @@ import { Command, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
-
-export const navItems = [
-  { name: "Work", href: "/#work" },
-  { name: "Playground", href: "/playground" },
-  { name: "Method", href: "/#method" },
-  { name: "Stack", href: "/#stack" },
-  { name: "Experience", href: "/#experience" },
-  { name: "About", href: "/#about" },
-];
+import { navItems } from "@/content/nav";
 
 export const Navbar = ({ onOpenCommand }) => {
   const [isScrolled, setIsScrolled] = useState(false);

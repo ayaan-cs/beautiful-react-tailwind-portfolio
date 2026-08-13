@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowUpRight, Search } from "lucide-react";
 import { projects } from "@/content/projects";
 import { profile } from "@/content/profile";
-import { navItems } from "./Navbar";
+import { navItems } from "@/content/nav";
 
 export const CommandMenu = ({ open, onClose }) => {
   const [query, setQuery] = useState("");

@@ -1,33 +1,31 @@
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
+const bootSequence = [
+    { delay: 200, text: "▶ INITIALIZING NEURAL INTERFACE...", type: 'system' },
+    { delay: 400, text: "▶ CONNECTING TO QUANTUM MESH NETWORK...", type: 'system' },
+    { delay: 600, text: "  └─ HANDSHAKE PROTOCOL: SUCCESS", type: 'success' },
+    { delay: 800, text: "▶ LOADING AI CONSCIOUSNESS MATRIX...", type: 'system' },
+    { delay: 1000, text: "  ├─ PATTERN RECOGNITION: ONLINE", type: 'success' },
+    { delay: 1200, text: "  ├─ NEURAL PATHWAYS: CALIBRATED", type: 'success' },
+    { delay: 1400, text: "  └─ COGNITIVE FUNCTIONS: OPTIMAL", type: 'success' },
+    { delay: 1600, text: "▶ SCANNING PORTFOLIO DATABASE...", type: 'system' },
+    { delay: 1800, text: "  ├─ PROJECTS: 9 FOUND", type: 'data' },
+    { delay: 2000, text: "  ├─ SKILLS: 25+ LOADED", type: 'data' },
+    { delay: 2200, text: "  └─ ACHIEVEMENTS: SYNCED", type: 'data' },
+    { delay: 2400, text: "▶ ESTABLISHING SECURE CONNECTION...", type: 'system' },
+    { delay: 2600, text: "  └─ ENCRYPTION: AES-256-GCM", type: 'success' },
+    { delay: 2800, text: "", type: 'blank' },
+    { delay: 3000, text: "█ ALL SYSTEMS OPERATIONAL", type: 'final' },
+    { delay: 3200, text: "█ LAUNCHING VIEWPORT...", type: 'final' },
+];
+
 export const StartupAnimation = ({ onAnimationComplete }) => {
-    const [phase, setPhase] = useState('init'); // init, boot, space, approach, dock, enter
+    const [phase, setPhase] = useState('init');
     const [bootProgress, setBootProgress] = useState(0);
     const [systemStatus, setSystemStatus] = useState([]);
     const [glitchEffect, setGlitchEffect] = useState(false);
     const canvasRef = useRef(null);
-    const audioContextRef = useRef(null);
-
-    // Boot sequence messages
-    const bootSequence = [
-        { delay: 200, text: "▶ INITIALIZING NEURAL INTERFACE...", type: 'system' },
-        { delay: 400, text: "▶ CONNECTING TO QUANTUM MESH NETWORK...", type: 'system' },
-        { delay: 600, text: "  └─ HANDSHAKE PROTOCOL: SUCCESS", type: 'success' },
-        { delay: 800, text: "▶ LOADING AI CONSCIOUSNESS MATRIX...", type: 'system' },
-        { delay: 1000, text: "  ├─ PATTERN RECOGNITION: ONLINE", type: 'success' },
-        { delay: 1200, text: "  ├─ NEURAL PATHWAYS: CALIBRATED", type: 'success' },
-        { delay: 1400, text: "  └─ COGNITIVE FUNCTIONS: OPTIMAL", type: 'success' },
-        { delay: 1600, text: "▶ SCANNING PORTFOLIO DATABASE...", type: 'system' },
-        { delay: 1800, text: "  ├─ PROJECTS: 3 FOUND", type: 'data' },
-        { delay: 2000, text: "  ├─ SKILLS: 25+ LOADED", type: 'data' },
-        { delay: 2200, text: "  └─ ACHIEVEMENTS: SYNCED", type: 'data' },
-        { delay: 2400, text: "▶ ESTABLISHING SECURE CONNECTION...", type: 'system' },
-        { delay: 2600, text: "  └─ ENCRYPTION: AES-256-GCM", type: 'success' },
-        { delay: 2800, text: "", type: 'blank' },
-        { delay: 3000, text: "█ ALL SYSTEMS OPERATIONAL", type: 'final' },
-        { delay: 3200, text: "█ LAUNCHING VIEWPORT...", type: 'final' },
-    ];
 
     // Create starfield effect
     useEffect(() => {
@@ -90,63 +88,6 @@ export const StartupAnimation = ({ onAnimationComplete }) => {
         }
     }, [phase]);
 
-    // Sound effects generator with user interaction check
-    const playSound = (type) => {
-        // Sound disabled by user preference
-        return;
-        try {
-            if (!audioContextRef.current) {
-                audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-            }
-
-            // Check if AudioContext is suspended (due to browser policy)
-            if (audioContextRef.current.state === 'suspended') {
-                audioContextRef.current.resume();
-            }
-
-            const ctx = audioContextRef.current;
-            const oscillator = ctx.createOscillator();
-            const gainNode = ctx.createGain();
-
-            oscillator.connect(gainNode);
-            gainNode.connect(ctx.destination);
-
-            switch(type) {
-                case 'boot':
-                    oscillator.frequency.setValueAtTime(440, ctx.currentTime);
-                    oscillator.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.1);
-                    gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-                    break;
-                case 'success':
-                    oscillator.frequency.setValueAtTime(523.25, ctx.currentTime);
-                    oscillator.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.15);
-                    gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
-                    break;
-                case 'whoosh':
-                    const noise = ctx.createBufferSource();
-                    const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.5, ctx.sampleRate);
-                    const data = buffer.getChannelData(0);
-                    for (let i = 0; i < data.length; i++) {
-                        data[i] = Math.random() * 2 - 1;
-                    }
-                    noise.buffer = buffer;
-                    noise.connect(gainNode);
-                    gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-                    noise.start();
-                    return;
-            }
-
-            oscillator.start();
-            oscillator.stop(ctx.currentTime + 0.2);
-        } catch (error) {
-            console.log('Audio playback failed:', error.message);
-            // Continue without sound
-        }
-    };
-
     // Animation sequence
     useEffect(() => {
         // Initial delay
@@ -160,11 +101,6 @@ export const StartupAnimation = ({ onAnimationComplete }) => {
                 setSystemStatus(prev => [...prev, item]);
                 setBootProgress((index + 1) / bootSequence.length * 100);
 
-                // Play sound effects
-                if (item.type === 'success') playSound('success');
-                else if (item.type === 'system') playSound('boot');
-
-                // Random glitch effect
                 if (Math.random() > 0.8) {
                     setGlitchEffect(true);
                     timeouts.push(setTimeout(() => setGlitchEffect(false), 100));
@@ -175,7 +111,6 @@ export const StartupAnimation = ({ onAnimationComplete }) => {
         // Phase transitions
         timeouts.push(setTimeout(() => {
             setPhase('space');
-            playSound('whoosh');
         }, 4000));
 
         timeouts.push(setTimeout(() => setPhase('approach'), 6000));
