@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { aboutCompact, aboutExpanded, films, site } from "@/content/film";
+import { aboutCompact, aboutExpanded } from "@/content/film";
 import { ExpandedPage } from "./ExpandedPage";
+import { LetterboxdWidget } from "./LetterboxdWidget";
 
 export const AboutPanel = ({ onExpand }) => {
   return (
@@ -79,32 +80,7 @@ export const AboutExpanded = ({ onClose }) => {
         </div>
       </div>
 
-      <a
-        href={site.letterboxd}
-        target="_blank"
-        rel="noreferrer"
-        className="mt-14 block max-w-xl rounded-2xl border border-[rgba(0,224,84,0.35)] p-5"
-      >
-        <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-[#00e054]">
-          <span aria-hidden="true">◎</span> Favorite films
-        </p>
-        <div className="mt-4 grid grid-cols-2 gap-3">
-          {films.map((film) => (
-            <a
-              key={film.title}
-              href={film.href}
-              target="_blank"
-              rel="noreferrer"
-              onClick={(event) => event.stopPropagation()}
-              className="rounded-lg border border-[rgba(0,224,84,0.2)] p-3 transition hover:-translate-y-0.5 hover:shadow-[0_0_18px_rgba(0,224,84,0.25)]"
-            >
-              <p className="font-mono text-[10px] text-[#00e054]">#{film.rank}</p>
-              <p className="mt-1 font-serif text-lg">{film.title}</p>
-              <p className="text-xs text-[var(--dim)]">{film.year}</p>
-            </a>
-          ))}
-        </div>
-      </a>
+      <LetterboxdWidget />
     </ExpandedPage>
   );
 };

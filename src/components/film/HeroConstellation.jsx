@@ -13,23 +13,8 @@ const FilmFrame = ({ active, onSelect, node }) => (
     style={{ left: `${node.x}%`, top: `${node.y}%` }}
     aria-label={node.label}
   >
-    <span
-      className="relative block h-9 w-7 rounded-[3px] border transition-all duration-200"
-      style={{
-        borderColor: active ? "var(--safelight)" : "rgba(255,235,215,0.22)",
-        background: active ? "rgba(232,72,44,0.35)" : "rgba(30,24,21,0.85)",
-        boxShadow: active ? "0 0 18px rgba(232,72,44,0.55)" : "none",
-        transform: active ? "scale(1.18)" : "scale(1)",
-      }}
-    >
-      <span className="absolute left-1 right-1 top-[2px] flex justify-between">
-        <i className="h-[3px] w-[3px] rounded-full bg-[rgba(237,230,218,0.35)]" />
-        <i className="h-[3px] w-[3px] rounded-full bg-[rgba(237,230,218,0.35)]" />
-      </span>
-      <span className="absolute left-1 right-1 bottom-[2px] flex justify-between">
-        <i className="h-[3px] w-[3px] rounded-full bg-[rgba(237,230,218,0.35)]" />
-        <i className="h-[3px] w-[3px] rounded-full bg-[rgba(237,230,218,0.35)]" />
-      </span>
+    <span className={`film-cell block transition-transform duration-200 ${active ? "is-live scale-110" : "scale-100"}`}>
+      <span className="film-cell-well" />
     </span>
     {active && (
       <span className="absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--cream)]">

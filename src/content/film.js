@@ -44,10 +44,38 @@ export const aboutExpanded = {
 };
 
 export const films = [
-  { rank: 1, title: "Interstellar", year: 2014, href: "https://letterboxd.com/film/interstellar/" },
-  { rank: 2, title: "Kal Ho Naa Ho", year: 2003, href: "https://letterboxd.com/film/kal-ho-naa-ho/" },
-  { rank: 3, title: "John Wick", year: 2014, href: "https://letterboxd.com/film/john-wick/" },
-  { rank: 4, title: "La La Land", year: 2016, href: "https://letterboxd.com/film/la-la-land/" },
+  {
+    rank: 1,
+    title: "Interstellar",
+    year: 2014,
+    href: "https://letterboxd.com/film/interstellar/",
+    tone: "space",
+    tagline: "This is not our planet.",
+  },
+  {
+    rank: 2,
+    title: "Kal Ho Naa Ho",
+    year: 2003,
+    href: "https://letterboxd.com/film/kal-ho-naa-ho/",
+    tone: "gold",
+    tagline: "Tomorrow may never come.",
+  },
+  {
+    rank: 3,
+    title: "John Wick",
+    year: 2014,
+    href: "https://letterboxd.com/film/john-wick/",
+    tone: "noir",
+    tagline: "Don't set him off.",
+  },
+  {
+    rank: 4,
+    title: "La La Land",
+    year: 2016,
+    href: "https://letterboxd.com/film/la-la-land/",
+    tone: "sunset",
+    tagline: "Here's to the fools who dream.",
+  },
 ];
 
 export const compactStack = [
