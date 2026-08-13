@@ -1,46 +1,20 @@
 # Ayaan Syed — Portfolio
 
-Applied AI and software portfolio. Live demos, model cards, and scores shown next to a baseline.
+Film / darkroom rebuild of the Vite + React + Tailwind site. Deployed to Netlify.
 
-**Live:** [ayaansportfolio.netlify.app](https://ayaansportfolio.netlify.app/)
+**Live locally:** `npm run dev` → http://localhost:5173/
 
-## What changed in this pass
+## Design
 
-The site follows a build brief: typed content in `src/content/`, dark-first design tokens, a proof strip, featured work with state badges, a method section, stack without fake skill meters, experience as a timeline, `/work/:slug` model cards, and a `/playground` scorecard. Command menu is ⌘K.
+Warm charcoal, safelight red, cream type. Fraunces headlines, Inter body, JetBrains Mono readouts. Film grain, light leaks, contact-sheet constellation, polaroid project stubs, corkboard contact card.
 
-Honesty rules live in `content-rules.md`. If a claim is not in `src/content/`, it should not ship.
+## Interactions
 
-## Stack
-
-- Vite + React 18 + Tailwind CSS v4
-- React Router
-- EmailJS for the contact form
-
-## Scripts
-
-```bash
-npm install
-npm run dev      # http://localhost:5173
-npm run build
-npm run preview
-npm run lint
-```
+- **⌘K / Ctrl+K** command palette (scroll, expand, GitHub, LinkedIn, copy email, reduced motion)
+- Compact About / Stack / Projects panels expand with Framer Motion `layoutId`
+- Custom glow cursor on fine pointers
+- `prefers-reduced-motion` (and a palette toggle) disable grain drift, leaks, cursor lag, and morphs
 
 ## Content
 
-| File | Role |
-|---|---|
-| `src/content/profile.js` | Name, positioning, education, how I work |
-| `src/content/projects.js` | Cards, model cards, guardrails |
-| `src/content/metrics.js` | Scorecard rows (IMDB table) |
-| `src/content/experience.js` | Roles |
-| `src/content/skills.js` | Stack |
-| `src/content/certificates.js` | Verifiable certs |
-| `src/content/proof.js` | Hero stats |
-
-## Contact
-
-- Email: [therealyaan9876@gmail.com](mailto:therealyaan9876@gmail.com)
-- LinkedIn: [linkedin.com/in/ayaan-syed](https://www.linkedin.com/in/ayaan-syed)
-- GitHub: [github.com/ayaan-cs](https://github.com/ayaan-cs)
-- Location: Austin, TX
+Copy lives in `src/content/film.js`. Projects are still a styled stub: `// coming online next`.
