@@ -1,7 +1,10 @@
 /* eslint-disable react/prop-types, react/no-unescaped-entities */
 import { useEffect, useState } from "react";
+import { ApplicationNotes } from "../components/sheet/ApplicationNotes";
+import { LivePreview } from "../components/sheet/LivePreview";
 import { LogoWell } from "../components/sheet/LogoWell";
 import { Reticle } from "../components/sheet/Reticle";
+import { SkillSchematic } from "../components/sheet/SkillSchematic";
 import {
   ALBUMS,
   CERTS,
@@ -13,6 +16,8 @@ import {
   FILMS,
   OUTSIDE_COPY,
   PAW_HAVEN_URL,
+  MONOS,
+  SLUGS,
   STACK_CATS,
   TOOLS,
   WORK_ROLES,
@@ -135,6 +140,7 @@ export const Home = () => {
       { id: "about", label: "Go to / expand About", kind: "Nav", mark: "01", run: () => { setTab("about"); openSheet("about"); } },
       { id: "stack", label: "Go to / expand Stack", kind: "Nav", mark: "02", run: () => { setTab("stack"); openSheet("stack"); } },
       { id: "projects", label: "Go to / expand Projects", kind: "Nav", mark: "03", run: () => { setTab("projects"); openSheet("projects"); } },
+      { id: "freelance", label: "Go to / expand Freelance", kind: "Nav", mark: "03", run: () => { setTab("projects"); openSheet("freelance"); } },
       { id: "github", label: "Open GitHub", kind: "Link", mark: "GH", run: () => window.open("https://github.com/ayaan-cs", "_blank", "noopener") },
       { id: "linkedin", label: "Open LinkedIn", kind: "Link", mark: "IN", run: () => window.open("https://linkedin.com/in/ayaan-syed", "_blank", "noopener") },
       { id: "cv", label: "Download CV", kind: "Util", mark: "CV", run: () => window.open(CV_URL, "_blank", "noopener") },
@@ -195,7 +201,18 @@ export const Home = () => {
         </div>
         <div className="sheet-header__right">
           <span>{COORDS}</span>
-          <span className="status-dot">
+          <span
+            className="status-dot"
+            role="button"
+            tabIndex={0}
+            onClick={() => setReduced((on) => !on)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setReduced((on) => !on);
+              }
+            }}
+          >
             <i />
             Reduced motion {reduced ? "on" : "off"}
           </span>
@@ -624,28 +641,37 @@ export const Home = () => {
             )}
 
             {expanded === "stack" && (
-              <div>
-                <div className="fig-head">
-                  <span>Full schedule of components</span>
-                  <span className="mute">
-                    {STACK_CATS.reduce((n, c) => n + c.items.length, 0)} items · 10 categories
-                  </span>
-                </div>
-                <div className="cats-grid">
-                  {STACK_CATS.map((c) => (
-                    <div key={c.ref} className="cat-block">
-                      <div className="fig-head">
-                        <span>{c.name}</span>
-                        <span className="mute">{c.ref}</span>
-                      </div>
-                      {c.items.map((item) => (
-                        <div key={item} className="cat-item">
-                          {item}
+              <div className="stack-full">
+                <SkillSchematic />
+                <div>
+                  <div className="fig-head">
+                    <span>Full schedule of components</span>
+                    <span className="mute">
+                      {STACK_CATS.reduce((n, c) => n + c.items.length, 0)} items · 10 categories
+                    </span>
+                  </div>
+                  <div className="cats-grid">
+                    {STACK_CATS.map((c) => (
+                      <div key={c.ref} className="cat-block">
+                        <div className="fig-head">
+                          <span>{c.name}</span>
+                          <span className="mute">{c.ref}</span>
                         </div>
-                      ))}
-                    </div>
-                  ))}
+                        {c.items.map((item) => (
+                          <div key={item} className="cat-item">
+                            {SLUGS[item] ? (
+                              <img src={`https://cdn.simpleicons.org/${SLUGS[item]}/1C1B19`} alt="" width="16" height="16" />
+                            ) : (
+                              <span className="mono-chip">{MONOS[item] || item.slice(0, 3).toUpperCase()}</span>
+                            )}
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
                 </div>
+                <ApplicationNotes />
               </div>
             )}
 
@@ -661,28 +687,32 @@ export const Home = () => {
               <div className="freelance-sheet">
                 <h2>Freelance</h2>
                 <p className="mute">Client work — design through ship</p>
-                <div className="fig-head">
-                  <span>Fig. A — Paw Haven</span>
-                  <span className="mute">
-                    Freelance ·{" "}
-                    <a href={PAW_HAVEN_URL} target="_blank" rel="noopener noreferrer">
-                      pawhavenpetsitting.com ↗
-                    </a>
-                  </span>
-                </div>
-                <p className="note-lead">
-                  Full-scope build for Paw Haven, a pet-sitting business — the public
-                  website, their booking service (Scritches), and client feedback forms.
-                  Design through ship, end to end.
-                </p>
-                <div className="freelance-steps">
-                  <div><span>01</span> Public marketing site — services, rates, coverage area</div>
-                  <div><span>02</span> Booking service (Scritches) — request, schedule, confirm</div>
-                  <div><span>03</span> Client feedback forms — post-visit reports back to owners</div>
-                </div>
-                <a className="ghost-btn" href={PAW_HAVEN_URL} target="_blank" rel="noopener noreferrer">
-                  Open live site ↗
-                </a>
+                <article className="freelance-card">
+                  <div className="fig-head">
+                    <span>Fig. A — Paw Haven</span>
+                    <span className="mute">
+                      Freelance ·{" "}
+                      <a href={PAW_HAVEN_URL} target="_blank" rel="noopener noreferrer">
+                        pawhavenpetsitting.com ↗
+                      </a>
+                    </span>
+                  </div>
+                  <div className="freelance-card__grid">
+                    <div>
+                      <p className="note-lead note-lead--sm">
+                        Full-scope build for Paw Haven, a pet-sitting business — the public
+                        website, their booking service (Scritches), and client feedback forms.
+                        Design through ship, end to end.
+                      </p>
+                      <div className="freelance-steps">
+                        <div><span>01</span> Public marketing site — services, rates, coverage area</div>
+                        <div><span>02</span> Booking service (Scritches) — request, schedule, confirm</div>
+                        <div><span>03</span> Client feedback forms — post-visit reports back to owners</div>
+                      </div>
+                    </div>
+                    <LivePreview />
+                  </div>
+                </article>
                 <div className="pending-box">More work coming soon</div>
               </div>
             )}

@@ -200,3 +200,179 @@ export const STACK_CATS = [
 
 export const iconUrl = (slug) =>
   `https://cdn.simpleicons.org/${slug}/1C1B19`;
+
+export const SLUGS = {
+  Python: "python",
+  Java: "openjdk",
+  JavaScript: "javascript",
+  TypeScript: "typescript",
+  R: "r",
+  Swift: "swift",
+  React: "react",
+  "Next.js": "nextdotjs",
+  "HTML/CSS": "html5",
+  "Tailwind CSS": "tailwindcss",
+  "Node.js": "nodedotjs",
+  Flask: "flask",
+  FastAPI: "fastapi",
+  TensorFlow: "tensorflow",
+  PyTorch: "pytorch",
+  "Scikit-learn": "scikitlearn",
+  LangChain: "langchain",
+  Pandas: "pandas",
+  NumPy: "numpy",
+  Jupyter: "jupyter",
+  "Google Earth Engine": "googleearthengine",
+  GCP: "googlecloud",
+  Docker: "docker",
+  Terraform: "terraform",
+  "CI/CD": "githubactions",
+  PostgreSQL: "postgresql",
+  "Cloud SQL": "googlecloud",
+  MongoDB: "mongodb",
+  Firebase: "firebase",
+  Linux: "linux",
+  "Git/GitLab": "gitlab",
+  Jira: "jira",
+  Confluence: "confluence",
+  "Observability & Monitoring": "grafana",
+};
+
+export const MONOS = {
+  SQL: "DB",
+  "REST API Design": "API",
+  MLOps: "OPS",
+  "Data Visualization": "VIZ",
+  "Observability & Monitoring": "OBS",
+  "Agile/Scrum": "AGL",
+  "Code Review": "REV",
+  SDLC: "LC",
+  "Model Monitoring": "MON",
+  "VS Code": "VSC",
+  Cursor: "CUR",
+  DataGrip: "DG",
+  "Microsoft 365": "365",
+  "Cross-functional Collaboration": "XFN",
+  "Technical Communication": "DOC",
+  Mentoring: "MTR",
+};
+
+export const SCHEMATIC_PROJECTS = [
+  {
+    ref: "PRJ-001",
+    name: "Watermark Discovery Dashboard",
+    stack: "Python · React · Cloud SQL · Cloud Run · GitLab CI/CD · OAuth",
+  },
+  {
+    ref: "PRJ-002",
+    name: "MindSight — Healthcare AI Platform",
+    stack: "React · Python · FastAPI · PostgreSQL · AI integration",
+  },
+  {
+    ref: "PRJ-003",
+    name: "Lone Star Aisle — API & Platform Integration Tool",
+    stack: "Python · REST APIs · OAuth/OIDC · YAML",
+  },
+];
+
+const norm = (v) => v.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+const SKILL_ALIASES = {
+  sql: ["cloudsql", "postgresql"],
+  postgres: ["postgresql"],
+  gcp: ["cloudrun", "cloudsql"],
+  googlecloud: ["cloudrun", "cloudsql"],
+  cloudrun: ["cloudrun"],
+  cicd: ["gitlabcicd"],
+  gitlab: ["gitlabcicd"],
+  fastapi: ["fastapi", "python"],
+  rest: ["restapis"],
+  restapi: ["restapis"],
+  oauth: ["oauth", "oauthoidc"],
+  oidc: ["oauthoidc"],
+  yaml: ["yaml"],
+};
+
+export function skillProjects(label) {
+  if (!label) return [];
+  const key = norm(label);
+  const wanted = [key].concat(SKILL_ALIASES[key] || []);
+  return SCHEMATIC_PROJECTS.filter((p) =>
+    p.stack.split("·").some((part) => wanted.includes(norm(part)))
+  ).map((p) => p.name);
+}
+
+export function schematicGeometry(categoryName, selected, accent = "#C1440E") {
+  const cat = STACK_CATS.find((c) => c.name === categoryName) || STACK_CATS[0];
+  const items = cat.items;
+  const twoCol = items.length > 5;
+  const rows = twoCol ? Math.ceil(items.length / 2) : items.length;
+  const rowH = 58;
+  const top = 46;
+  const busX = 92;
+  const boxW = 214;
+  const colBoxX = [140, 520];
+  const riserX = 476;
+  const busBottom = top + (rows - 1) * rowH;
+  const feedY = top - 26;
+  const nodes = [];
+  const traces = [];
+
+  traces.push({ x1: busX, y1: feedY, x2: busX, y2: top, stroke: "#1C1B19", w: 1.6 });
+  if (twoCol) {
+    const col2Last = top + (items.length - rows - 1) * rowH;
+    traces.push({ x1: busX, y1: feedY, x2: riserX, y2: feedY, stroke: "rgba(28,27,25,0.62)", w: 1.2 });
+    traces.push({ x1: riserX, y1: feedY, x2: riserX, y2: col2Last, stroke: "rgba(28,27,25,0.62)", w: 1.2 });
+  }
+
+  items.forEach((label, i) => {
+    const col = twoCol ? Math.floor(i / rows) : 0;
+    const r = twoCol ? i % rows : i;
+    const y = top + r * rowH;
+    const boxX = colBoxX[col];
+    const active = selected === label;
+    const stroke = active ? accent : "#1C1B19";
+    const startX = col === 0 ? busX : riserX;
+    const midX = startX + (boxX - startX) / 2;
+    traces.push({
+      x1: startX,
+      y1: y,
+      x2: midX,
+      y2: y,
+      stroke: active ? accent : "rgba(28,27,25,0.5)",
+      w: active ? 2 : 1.1,
+    });
+    traces.push({
+      x1: midX,
+      y1: y,
+      x2: boxX,
+      y2: y,
+      stroke: active ? accent : "rgba(28,27,25,0.5)",
+      w: active ? 2 : 1.1,
+    });
+    nodes.push({
+      label,
+      ref: `${cat.ref}-${String(i + 1).padStart(2, "0")}`,
+      y,
+      boxX,
+      boxY: y - 14,
+      boxW,
+      pinX: startX,
+      stroke,
+      sw: active ? 1.8 : 1,
+      fill: active ? "rgba(193,68,14,0.07)" : "rgba(246,241,231,0.95)",
+    });
+  });
+
+  return {
+    cat,
+    nodes,
+    traces,
+    busX,
+    busTop: feedY,
+    busBottom,
+    height: busBottom + 60,
+    twoCol,
+    viewBox: `0 0 ${twoCol ? 760 : 400} ${busBottom + 60}`,
+  };
+}
