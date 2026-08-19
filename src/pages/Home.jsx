@@ -5,7 +5,6 @@ import { ApplicationNotes } from "../components/sheet/ApplicationNotes";
 import { Disc } from "../components/sheet/Disc";
 import { LivePreview } from "../components/sheet/LivePreview";
 import { LogoWell } from "../components/sheet/LogoWell";
-import { Pipeline } from "../components/sheet/Pipeline";
 import { Plotter } from "../components/sheet/Plotter";
 import { Reticle } from "../components/sheet/Reticle";
 import { SkillSchematic } from "../components/sheet/SkillSchematic";
@@ -192,7 +191,6 @@ export const Home = () => {
   return (
     <div className={`sheet${reduced ? " is-reduced" : ""}${gridFlash ? " is-grid-flash" : ""}`}>
       <SmoothScroll reduced={reduced} paused={!!expanded || paletteOpen || discDragging} />
-      <Pipeline reduced={reduced} />
       <Plotter reduced={reduced} replay={plotReplay} />
 
       <header className="sheet-header">

@@ -292,7 +292,7 @@ export function SkillSchematic({ playable = true }) {
           )}
         </div>
         <p className="schematic-rev">
-          Phase 4.5 — live data pipeline behind the sheet · ingest → cache → dash
+          Sheet stock · newsprint grain · lamp on the reticle
         </p>
       </div>
     </div>
