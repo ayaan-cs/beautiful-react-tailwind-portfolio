@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from "react";
 import { STACK_CATS, schematicGeometry, skillProjects } from "../../data/portfolio";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 
 const ACCENT = "#C1440E";
 const GRID = 8;
@@ -17,6 +18,9 @@ function snapTo(v, on) {
 }
 
 export function SkillSchematic({ playable = true }) {
+  const screen = useBreakpoint();
+  const listMode = screen === "hand";
+  const canDrag = playable && screen === "desk";
   const [category, setCategory] = useState("Languages");
   const [selected, setSelected] = useState(null);
   const [offsetsByCat, setOffsetsByCat] = useState({});
@@ -31,7 +35,7 @@ export function SkillSchematic({ playable = true }) {
   snapRef.current = snap;
 
   const offsets = offsetsByCat[category] || {};
-  const g = schematicGeometry(category, selected, ACCENT, offsets);
+  const g = schematicGeometry(category, selected, ACCENT, offsets, screen);
   const usedIn = skillProjects(selected);
   const dirty = Object.values(offsets).some((o) => o.x || o.y);
 
@@ -75,7 +79,7 @@ export function SkillSchematic({ playable = true }) {
   };
 
   useEffect(() => {
-    if (!playable) return undefined;
+    if (!canDrag) return undefined;
 
     const onMove = (e) => {
       const drag = dragRef.current;
@@ -108,10 +112,10 @@ export function SkillSchematic({ playable = true }) {
       window.removeEventListener("pointerup", onUp);
       window.removeEventListener("pointercancel", onUp);
     };
-  }, [playable]);
+  }, [canDrag]);
 
   const onNodePointerDown = (e, label) => {
-    if (!playable) {
+    if (!canDrag) {
       setSelected(label);
       return;
     }
@@ -149,11 +153,17 @@ export function SkillSchematic({ playable = true }) {
     });
   };
 
+  const copy = listMode || screen === "tablet"
+    ? "Tap a junction for usage"
+    : canDrag
+      ? "Drag the junctions · scatter or fan the traces · click for usage"
+      : "Filter by category · click a junction";
+
   return (
     <div
-      className={dragging ? "schematic is-dragging" : "schematic"}
+      className={`schematic schematic--${screen}${dragging ? " is-dragging" : ""}`}
       onKeyDown={(e) => {
-        if (!playable || !selected) return;
+        if (!canDrag || !selected) return;
         const step = e.shiftKey || snap ? GRID * 2 : GRID;
         if (e.key === "ArrowLeft") { e.preventDefault(); nudge(-step, 0); }
         else if (e.key === "ArrowRight") { e.preventDefault(); nudge(step, 0); }
@@ -167,14 +177,7 @@ export function SkillSchematic({ playable = true }) {
     >
       <div className="fig-head">
         <span>Fig. A — Schematic, skill graph</span>
-        <span className="mute schematic-copy schematic-copy--desk">
-          {playable
-            ? "Drag the junctions · scatter or fan the traces · click for usage"
-            : "Filter by category · click a junction"}
-        </span>
-        <span className="mute schematic-copy schematic-copy--hand">
-          Tap a junction for usage
-        </span>
+        <span className="mute">{copy}</span>
       </div>
 
       <div className="schematic-tabs">
@@ -199,137 +202,141 @@ export function SkillSchematic({ playable = true }) {
       <div className="schematic-frame">
         <div className="schematic-frame__bar">
           <span>Dwg. A-{g.cat.ref} · {g.cat.name}</span>
-          {playable ? (
-            <>
-              <span className="schematic-tools">
-                <button type="button" onClick={scatter}>Scatter</button>
-                <button type="button" onClick={fan}>Fan</button>
-                <button
-                  type="button"
-                  className={snap ? "is-on" : ""}
-                  aria-pressed={snap}
-                  onClick={() => setSnap((on) => !on)}
-                >
-                  Snap
-                </button>
-                <button type="button" onClick={reset} disabled={!dirty}>Re-plot</button>
-              </span>
-              <span className="schematic-hand-note">{g.cat.items.length} nodes · tap a junction</span>
-            </>
+          {canDrag ? (
+            <span className="schematic-tools">
+              <button type="button" onClick={scatter}>Scatter</button>
+              <button type="button" onClick={fan}>Fan</button>
+              <button
+                type="button"
+                className={snap ? "is-on" : ""}
+                aria-pressed={snap}
+                onClick={() => setSnap((on) => !on)}
+              >
+                Snap
+              </button>
+              <button type="button" onClick={reset} disabled={!dirty}>Re-plot</button>
+            </span>
           ) : (
-            <span>{g.cat.items.length} nodes · click a junction for usage</span>
+            <span>{g.cat.items.length} nodes · tap a junction</span>
           )}
         </div>
-        <div className="schematic-frame__canvas">
-          <svg
-            ref={svgRef}
-            viewBox={g.viewBox}
-            width="100%"
-            height={Math.max(g.height, 280)}
-            role="group"
-            aria-label="Skill schematic diagram. Drag nodes to rearrange traces."
-          >
-            <line x1={g.busX} y1={g.busTop} x2={g.busX} y2={g.busBottom} stroke="#1C1B19" strokeWidth="1.6" />
-            <circle cx={g.busX} cy={g.busTop} r="3" fill="#1C1B19" />
-            <text x={g.busX + 9} y={g.busTop - 10} className="schematic-bus">BUS</text>
-            {g.traces.map((s, i) => (
-              <line
-                key={`${s.x1}-${s.y1}-${s.x2}-${s.y2}-${i}`}
-                x1={s.x1}
-                y1={s.y1}
-                x2={s.x2}
-                y2={s.y2}
-                stroke={s.stroke}
-                strokeWidth={s.w}
-              />
-            ))}
-            {g.nodes.map((n) => (
-              <g
-                key={n.ref}
-                tabIndex={0}
-                role="button"
-                aria-label={n.label}
-                aria-pressed={selected === n.label}
-                onPointerDown={(e) => onNodePointerDown(e, n.label)}
-                onDoubleClick={(e) => {
-                  e.preventDefault();
-                  reseat(n.label);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    setSelected(n.label);
-                  }
-                }}
-                className={n.loose ? "schematic-node is-loose" : "schematic-node"}
+        {listMode ? (
+          <ul className="schematic-list">
+            {g.nodes.map((n) => {
+              const on = selected === n.label;
+              const used = on ? skillProjects(n.label) : [];
+              return (
+                <li key={n.ref} className={on ? "is-on" : ""}>
+                  <button
+                    type="button"
+                    aria-expanded={on}
+                    onClick={() => setSelected(on ? null : n.label)}
+                  >
+                    <span className="schematic-list__ref">{n.ref}</span>
+                    <span className="schematic-list__label">{n.label}</span>
+                    <span className="schematic-list__mark" aria-hidden="true">{on ? "−" : "+"}</span>
+                  </button>
+                  {on && (
+                    <div className="schematic-list__detail">
+                      <div className="mute">Used in</div>
+                      {used.length > 0 ? (
+                        <div className="schematic-chips">
+                          {used.map((p) => (
+                            <span key={p}><i />{p}</span>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="mute">Reserved · project write-up pending.</span>
+                      )}
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <>
+            <div className="schematic-frame__canvas">
+              <svg
+                ref={svgRef}
+                viewBox={g.viewBox}
+                width="100%"
+                role="group"
+                aria-label={canDrag
+                  ? "Skill schematic diagram. Drag nodes to rearrange traces."
+                  : "Skill schematic diagram. Tap a junction for usage."}
               >
-                <circle cx={n.pinX} cy={n.y0} r="3.2" fill={n.stroke} />
-                <rect x={n.boxX} y={n.boxY} width={n.boxW} height="28" fill={n.fill} stroke={n.stroke} strokeWidth={n.sw} />
-                <rect x={n.boxX} y={n.boxY} width="4" height="28" fill={n.stroke} />
-                <text x={n.boxX + 15} y={n.y + 4} className="schematic-label">{n.label}</text>
-                <text x={n.boxX + n.boxW - 10} y={n.y + 4} textAnchor="end" className="schematic-ref">{n.ref}</text>
-              </g>
-            ))}
-          </svg>
-        </div>
-        <ul className="schematic-list">
-          {g.nodes.map((n) => {
-            const on = selected === n.label;
-            const used = on ? skillProjects(n.label) : [];
-            return (
-              <li key={n.ref} className={on ? "is-on" : ""}>
-                <button
-                  type="button"
-                  aria-expanded={on}
-                  onClick={() => setSelected(on ? null : n.label)}
-                >
-                  <span className="schematic-list__ref">{n.ref}</span>
-                  <span className="schematic-list__label">{n.label}</span>
-                  <span className="schematic-list__mark" aria-hidden="true">{on ? "−" : "+"}</span>
-                </button>
-                {on && (
-                  <div className="schematic-list__detail">
-                    <div className="mute">Used in</div>
-                    {used.length > 0 ? (
-                      <div className="schematic-chips">
-                        {used.map((p) => (
-                          <span key={p}><i />{p}</span>
-                        ))}
-                      </div>
-                    ) : (
-                      <span className="mute">Reserved · project write-up pending.</span>
-                    )}
+                <line x1={g.busX} y1={g.busTop} x2={g.busX} y2={g.busBottom} stroke="#1C1B19" strokeWidth="1.6" />
+                <circle cx={g.busX} cy={g.busTop} r="3" fill="#1C1B19" />
+                <text x={g.busX + 9} y={g.busTop - 10} className="schematic-bus">BUS</text>
+                {g.traces.map((s, i) => (
+                  <line
+                    key={`${s.x1}-${s.y1}-${s.x2}-${s.y2}-${i}`}
+                    x1={s.x1}
+                    y1={s.y1}
+                    x2={s.x2}
+                    y2={s.y2}
+                    stroke={s.stroke}
+                    strokeWidth={s.w}
+                  />
+                ))}
+                {g.nodes.map((n) => (
+                  <g
+                    key={n.ref}
+                    tabIndex={0}
+                    role="button"
+                    aria-label={n.label}
+                    aria-pressed={selected === n.label}
+                    onPointerDown={(e) => onNodePointerDown(e, n.label)}
+                    onDoubleClick={(e) => {
+                      if (!canDrag) return;
+                      e.preventDefault();
+                      reseat(n.label);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setSelected(n.label);
+                      }
+                    }}
+                    className={n.loose ? "schematic-node is-loose" : "schematic-node"}
+                  >
+                    <circle cx={n.pinX} cy={n.y0} r="3.2" fill={n.stroke} />
+                    <rect x={n.boxX} y={n.boxY} width={n.boxW} height="28" fill={n.fill} stroke={n.stroke} strokeWidth={n.sw} />
+                    <rect x={n.boxX} y={n.boxY} width="4" height="28" fill={n.stroke} />
+                    <text x={n.boxX + 15} y={n.y + 4} className="schematic-label">{n.label}</text>
+                    <text x={n.boxX + n.boxW - 10} y={n.y + 4} textAnchor="end" className="schematic-ref">{n.ref}</text>
+                  </g>
+                ))}
+              </svg>
+            </div>
+            <div className="schematic-legend">
+              {selected ? (
+                <div className="schematic-legend__row">
+                  <div className="accent">
+                    Node {g.nodes.find((n) => n.label === selected)?.ref} · {selected}
                   </div>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-        <div className="schematic-legend">
-          {selected ? (
-            <div className="schematic-legend__row">
-              <div className="accent">
-                Node {g.nodes.find((n) => n.label === selected)?.ref} · {selected}
-              </div>
-              <div className="mute">Used in</div>
-              {usedIn.length > 0 ? (
-                <div className="schematic-chips">
-                  {usedIn.map((p) => (
-                    <span key={p}><i />{p}</span>
-                  ))}
+                  <div className="mute">Used in</div>
+                  {usedIn.length > 0 ? (
+                    <div className="schematic-chips">
+                      {usedIn.map((p) => (
+                        <span key={p}><i />{p}</span>
+                      ))}
+                    </div>
+                  ) : (
+                    <span className="mute">Reserved · project write-up pending.</span>
+                  )}
                 </div>
               ) : (
-                <span className="mute">Reserved · project write-up pending.</span>
+                <div className="mute">
+                  {canDrag
+                    ? "Drag a junction off the bus — traces stretch with it. Scatter or fan to restage the sheet. Snap to the grid, or hold Shift. Double-click a node (or Delete) to reseat it. Re-plot restores the drawing."
+                    : "Tap a junction to trace it back to the project that used it."}
+                </div>
               )}
             </div>
-          ) : (
-            <div className="mute">
-              {playable
-                ? "Drag a junction off the bus — traces stretch with it. Scatter or fan to restage the sheet. Snap to the grid, or hold Shift. Double-click a node (or Delete) to reseat it. Re-plot restores the drawing."
-                : "No junction selected — click or tab to a node to trace it back to the project that used it."}
-            </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
     </div>
   );

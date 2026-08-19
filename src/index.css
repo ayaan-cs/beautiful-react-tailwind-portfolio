@@ -17,6 +17,7 @@
 html, body, #root {
   margin: 0;
   min-height: 100%;
+  overflow-x: clip;
   background-color: var(--paper);
   background-image: radial-gradient(rgba(28, 27, 25, 0.16) 1px, transparent 1px);
   background-size: 22px 22px;
@@ -993,7 +994,7 @@ button.sheet-header__title { color: inherit; }
   color: rgba(28, 27, 25, 0.62);
 }
 .schematic-frame__canvas { padding: 26px 30px 34px; overflow: visible; }
-.schematic-frame__canvas svg { display: block; max-width: 980px; overflow: visible; }
+.schematic-frame__canvas svg { display: block; width: 100%; height: auto; max-width: 980px; overflow: visible; }
 .schematic-bus {
   font-family: "IBM Plex Mono", ui-monospace, monospace;
   font-size: 10px;
@@ -1042,9 +1043,6 @@ button.sheet-header__title { color: inherit; }
 }
 .schematic-chips i { width: 6px; height: 6px; border-radius: 50%; background: var(--rust); }
 
-.schematic-copy--hand,
-.schematic-hand-note,
-.schematic-list { display: none; }
 .schematic-list {
   list-style: none;
   margin: 0;
@@ -1060,12 +1058,14 @@ button.sheet-header__title { color: inherit; }
   align-items: baseline;
   gap: 14px;
   padding: 14px 16px;
+  min-height: 48px;
   border: 0;
   background: transparent;
   font: inherit;
   text-align: left;
   cursor: pointer;
   color: var(--ink);
+  touch-action: manipulation;
 }
 .schematic-list li.is-on { background: rgba(193, 68, 14, 0.06); }
 .schematic-list__ref {
@@ -1326,42 +1326,107 @@ button.sheet-header__title { color: inherit; }
   border-radius: 50%;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   .sheet-header, .hero, .panel, .sheet-nav, .sheet-footer, .overlay-bar, .overlay-body {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 36px;
+    padding-right: 36px;
   }
-  .plotter__meta { left: 20px; right: 20px; }
-  .sheet-header { height: auto; padding-top: 10px; padding-bottom: 10px; flex-wrap: wrap; white-space: normal; }
-  .notes-grid, .about-full__intro, .cv-grid, .project-groups, .certs-grid, .log-row, .taste-grid, .app-notes__grid, .freelance-card__grid {
-    grid-template-columns: 1fr;
+  .plotter__meta { left: 36px; right: 36px; }
+  .hero-disc { right: 36px; }
+  .sheet-header {
+    height: auto;
+    min-height: 47px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    flex-wrap: wrap;
+    white-space: normal;
+    row-gap: 8px;
   }
-  .sheet-nav { top: auto; }
+  .sheet-header__left, .sheet-header__right { flex-wrap: wrap; gap: 12px 18px; }
+  .hero { padding-top: 40px; }
+  .overlay-body { padding-top: 40px; padding-bottom: 72px; }
+  .about-full h2, .pending-sheet h2, .freelance-sheet h2 { font-size: 32px; }
+  .cats-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  .taste-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .schematic-frame__canvas { padding: 18px 16px 24px; }
+  .schematic-frame__canvas svg { max-width: 100%; }
+  .schematic--tablet .schematic-node { cursor: pointer; }
+  .schematic-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 8px;
+  }
+  .schematic-tabs::-webkit-scrollbar { display: none; }
+  .schematic-tabs button { flex: none; }
+  .log-row {
+    grid-template-columns: 72px 1fr;
+    row-gap: 12px;
+  }
+  .log-row__points { grid-column: 1 / -1; padding-left: 90px; }
+  .certs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .app-notes__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero-disc {
     position: static;
     margin: 22px 0 0;
     align-items: flex-start;
   }
   .hero-disc__cap { text-align: left; max-width: none; }
+}
+
+@media (max-width: 699px) {
+  .sheet-header, .hero, .panel, .sheet-nav, .sheet-footer, .overlay-bar, .overlay-body {
+    padding-left: max(18px, env(safe-area-inset-left));
+    padding-right: max(18px, env(safe-area-inset-right));
+  }
+  .plotter__meta { left: 18px; right: 18px; }
+  .notes-grid, .about-full__intro, .cv-grid, .project-groups, .log-row, .taste-grid, .app-notes__grid, .freelance-card__grid {
+    grid-template-columns: 1fr;
+  }
+  .certs-grid { grid-template-columns: 1fr; }
+  .log-row__points { padding-left: 0; }
+  .sheet-nav {
+    top: auto;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .sheet-nav::-webkit-scrollbar { display: none; }
+  .sheet-nav__inner { gap: 22px; min-width: max-content; }
+  .hero h1 { font-size: clamp(28px, 9vw, 42px); }
   .hero-rule { flex-wrap: wrap; max-width: none; }
   .hero-rule__label { white-space: normal; }
-
-  .schematic-copy--desk { display: none; }
-  .schematic-copy--hand { display: inline; }
-  .schematic-tools,
-  .schematic-frame__canvas,
-  .schematic-legend { display: none; }
-  .schematic-hand-note { display: inline; }
-  .schematic-list { display: block; }
+  .note-card { padding: 22px 20px; }
+  .group-card { min-height: 0; padding: 20px; }
+  .overlay-bar { gap: 12px; }
+  .overlay-bar span { min-width: 0; }
+  .about-full h2, .pending-sheet h2, .freelance-sheet h2 { font-size: 28px; }
+  .fig-head, .panel-head, .schematic-frame__bar { flex-wrap: wrap; gap: 8px 16px; }
   .schematic-tabs {
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    margin: 0 -20px 18px;
-    padding: 0 20px 8px;
+    margin: 0 -18px 18px;
+    padding: 0 18px 8px;
   }
   .schematic-tabs::-webkit-scrollbar { display: none; }
   .schematic-tabs button { flex: none; }
-  .schematic-frame__bar { flex-wrap: wrap; }
+  .posters, .covers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tools-grid { grid-template-columns: 1fr; }
+  .sheet-footer { gap: 10px 16px; }
+  .sheet-footer div { flex-wrap: wrap; gap: 10px 16px; }
+}
+
+@media (max-width: 420px) {
+  .sheet-header, .hero, .panel, .sheet-nav, .sheet-footer, .overlay-bar, .overlay-body {
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+  }
+  .hero { padding-top: 28px; padding-bottom: 22px; }
+  .hero h1 { font-size: clamp(26px, 10vw, 34px); }
+  .disc, .disc__platter { width: 64px; height: 64px; }
+  .schematic-tabs { margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px; }
+  .plotter__title { font-size: 8px; }
 }

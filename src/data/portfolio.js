@@ -424,20 +424,21 @@ export function skillProjects(label) {
   ).map((p) => p.name);
 }
 
-export function schematicGeometry(categoryName, selected, accent = "#C1440E", offsets = {}) {
+export function schematicGeometry(categoryName, selected, accent = "#C1440E", offsets = {}, screen = "desk") {
   const cat = STACK_CATS.find((c) => c.name === categoryName) || STACK_CATS[0];
   const items = cat.items;
-  const twoCol = items.length > 5;
+  const compact = screen !== "desk";
+  const twoCol = screen === "desk" && items.length > 5;
   const rows = twoCol ? Math.ceil(items.length / 2) : items.length;
-  const rowH = 58;
-  const top = 46;
-  const busX = 92;
-  const boxW = 214;
-  const colBoxX = [140, 520];
+  const rowH = compact ? 52 : 58;
+  const top = compact ? 40 : 46;
+  const busX = compact ? 44 : 92;
+  const boxW = compact ? 228 : 214;
+  const colBoxX = twoCol ? [140, 520] : [compact ? 88 : 140];
   const riserX = 476;
   const busBottom = top + (rows - 1) * rowH;
   const feedY = top - 26;
-  const layoutW = twoCol ? 760 : 400;
+  const layoutW = twoCol ? 760 : compact ? 360 : 400;
   const layoutH = busBottom + 60;
   const nodes = [];
   const traces = [];
