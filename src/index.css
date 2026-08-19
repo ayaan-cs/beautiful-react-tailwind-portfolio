@@ -56,6 +56,7 @@ a:hover { color: var(--rust); }
 
 .sheet {
   position: relative;
+  isolation: isolate;
   min-height: 100vh;
   background-color: var(--paper);
   background-image: radial-gradient(rgba(28, 27, 25, 0.16) 1px, transparent 1px);
@@ -63,6 +64,68 @@ a:hover { color: var(--rust); }
 }
 .sheet.is-grid-flash {
   background-image: radial-gradient(rgba(28, 27, 25, 0.42) 1.35px, transparent 1.35px);
+}
+
+.pipeline {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.pipeline__svg { display: block; overflow: visible; }
+.pipeline__loop {
+  fill: none;
+  stroke: rgba(28, 27, 25, 0.16);
+  stroke-width: 1;
+}
+.pipeline__loop--flow {
+  stroke: rgba(193, 68, 14, 0.28);
+  stroke-width: 1;
+  stroke-dasharray: 5 13;
+  stroke-dashoffset: 0;
+  animation: pipeline-flow 32s linear infinite;
+}
+.pipeline__tick {
+  stroke: rgba(28, 27, 25, 0.12);
+  stroke-width: 1;
+}
+.pipeline__spur {
+  stroke: rgba(28, 27, 25, 0.14);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+}
+.pipeline__elbow {
+  fill: rgba(28, 27, 25, 0.28);
+}
+.pipeline__node circle {
+  fill: var(--paper);
+  stroke: rgba(28, 27, 25, 0.4);
+  stroke-width: 1;
+}
+.pipeline__node.is-hot circle {
+  stroke: var(--rust);
+  fill: rgba(193, 68, 14, 0.12);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pipeline-pulse 2.8s ease-in-out infinite;
+}
+.pipeline text {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  fill: rgba(28, 27, 25, 0.34);
+  text-transform: uppercase;
+}
+.pipeline__pkt {
+  fill: rgba(28, 27, 25, 0.55);
+}
+.pipeline__pkt.is-hot { fill: var(--rust); }
+
+@keyframes pipeline-flow { to { stroke-dashoffset: -360; } }
+@keyframes pipeline-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.35); }
 }
 
 .tab-enter { animation: fadeUp 420ms ease-out; }
@@ -121,7 +184,8 @@ a:hover { color: var(--rust); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tab-enter, .overlay--in, .plotter, .plotter__path, .group-card, .note-card, .cert-card, .current-card {
+  .tab-enter, .overlay--in, .plotter, .plotter__path, .group-card, .note-card, .cert-card, .current-card,
+  .pipeline__loop--flow, .pipeline__node.is-hot circle {
     animation: none;
     transition: none;
     transform: none;
@@ -134,7 +198,8 @@ a:hover { color: var(--rust); }
 .sheet.is-reduced .group-card,
 .sheet.is-reduced .note-card,
 .sheet.is-reduced .cert-card,
-.sheet.is-reduced .current-card {
+.sheet.is-reduced .current-card,
+.sheet.is-reduced .pipeline {
   animation: none;
   transition: none;
   transform: none;
@@ -198,7 +263,7 @@ button.sheet-header__title { color: inherit; }
 .text-btn { border: 0; padding: 0; color: inherit; }
 .text-btn:hover { color: var(--rust); }
 
-.hero, .panel { max-width: 1240px; margin: 0 auto; padding: 30px 64px 64px; }
+.hero, .panel { max-width: 1240px; margin: 0 auto; padding: 30px 64px 64px; position: relative; z-index: 1; }
 .hero { padding-top: 52px; padding-bottom: 30px; position: relative; }
 .kicker {
   font-size: 11px;
@@ -634,6 +699,8 @@ button.sheet-header__title { color: inherit; }
 .cv-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 
 .sheet-footer {
+  position: relative;
+  z-index: 1;
   border-top: 1px solid var(--ink-22);
   padding: 22px 64px 40px;
   display: flex;

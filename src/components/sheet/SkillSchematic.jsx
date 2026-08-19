@@ -292,7 +292,7 @@ export function SkillSchematic({ playable = true }) {
           )}
         </div>
         <p className="schematic-rev">
-          Phase 4.5 pending — a live data pipeline animation behind the sheet.
+          Phase 4.5 — live data pipeline behind the sheet · ingest → cache → dash
         </p>
       </div>
     </div>
