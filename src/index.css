@@ -127,28 +127,6 @@ a:hover { color: var(--rust); }
   transform: none;
 }
 
-.fiducial {
-  position: fixed;
-  z-index: 40;
-  width: 22px;
-  height: 22px;
-  pointer-events: none;
-}
-.fiducial--tl { left: 26px; top: 26px; }
-.fiducial--br { right: 26px; bottom: 26px; }
-.fiducial__x, .fiducial__y { position: absolute; background: rgba(28, 27, 25, 0.45); }
-.fiducial__x { left: 0; top: 11px; width: 22px; height: 1px; }
-.fiducial__y { left: 11px; top: 0; width: 1px; height: 22px; }
-.fiducial__ring {
-  position: absolute;
-  left: 5px;
-  top: 5px;
-  width: 12px;
-  height: 12px;
-  border: 1px solid rgba(28, 27, 25, 0.22);
-  border-radius: 50%;
-}
-
 .sheet-header {
   position: sticky;
   top: 0;

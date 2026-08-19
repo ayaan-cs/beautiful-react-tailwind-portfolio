@@ -40,16 +40,6 @@ const EXPAND_TITLES = {
   freelance: "03 / Freelance — client work",
 };
 
-function Fiducial({ className }) {
-  return (
-    <div className={`fiducial ${className}`} aria-hidden="true">
-      <div className="fiducial__x" />
-      <div className="fiducial__y" />
-      <div className="fiducial__ring" />
-    </div>
-  );
-}
-
 function GhostLink({ href, children }) {
   return (
     <a href={href} target="_blank" rel="noopener noreferrer">
@@ -195,8 +185,6 @@ export const Home = () => {
     <div className={reduced ? "sheet is-reduced" : "sheet"}>
       <SmoothScroll reduced={reduced} paused={!!expanded || paletteOpen} />
       <Plotter reduced={reduced} />
-      <Fiducial className="fiducial--tl" />
-      <Fiducial className="fiducial--br" />
 
       <header className="sheet-header">
         <div className="sheet-header__left">
