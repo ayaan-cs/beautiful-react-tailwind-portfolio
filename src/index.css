@@ -416,16 +416,16 @@ button.sheet-header__title { color: inherit; }
 .mute-body { font-size: 14.5px; color: rgba(28, 27, 25, 0.72); }
 
 .logo-well {
-  width: 120px;
-  height: 48px;
+  width: 72px;
+  height: 56px;
   flex: none;
   display: flex;
   align-items: center;
   justify-content: flex-start;
 }
 .logo-well img {
-  max-width: 112px;
-  max-height: 40px;
+  max-width: 72px;
+  max-height: 18px;
   width: auto;
   height: auto;
   object-fit: contain;
@@ -433,8 +433,8 @@ button.sheet-header__title { color: inherit; }
   display: block;
 }
 .logo-well--mark img {
-  max-width: 40px;
-  max-height: 40px;
+  max-width: 52px;
+  max-height: 52px;
 }
 .logo-well__mark {
   font-family: "IBM Plex Mono", ui-monospace, monospace;
@@ -701,8 +701,8 @@ button.sheet-header__title { color: inherit; }
 
 .log-row {
   display: grid;
-  grid-template-columns: 120px 1fr 1.5fr;
-  column-gap: 16px;
+  grid-template-columns: 72px 1fr 1.5fr;
+  column-gap: 18px;
   align-items: center;
   padding: 18px 0;
   border-bottom: 1px dashed var(--ink-22);
