@@ -317,24 +317,26 @@ export const Home = () => {
               onMouseEnter={() => setHoverCard("role")}
               onMouseLeave={() => setHoverCard(null)}
             >
-              <LogoWell src={currentRole.logo} alt="H-E-B" shape={currentRole.logoShape} />
-              <div className="current-card__body">
-                <div className="current-card__meta">
-                  <span className="accent">A · Role</span>
-                  <span>{currentRole.when}</span>
+              <div className="current-card__meta">
+                <span className="accent">A · Role</span>
+                <span>{currentRole.when}</span>
+              </div>
+              <div className="current-card__main">
+                <LogoWell src={currentRole.logo} alt="H-E-B" shape="mark" />
+                <div>
+                  <div className="current-card__title">{currentRole.title}</div>
+                  <div className="current-card__sub">
+                    H-E-B Digital — Data Infrastructure · Austin, TX
+                  </div>
                 </div>
-                <div className="current-card__title">{currentRole.title}</div>
-                <div className="current-card__sub">
-                  H-E-B Digital — Data Infrastructure · Austin, TX
-                </div>
-                <div className="current-card__log">
-                  {currentRole.points.map((pt, i) => (
-                    <div key={pt} className="log-point">
-                      <span>{String(i + 1).padStart(2, "0")}</span>
-                      <span>{pt}</span>
-                    </div>
-                  ))}
-                </div>
+              </div>
+              <div className="current-card__log">
+                {currentRole.points.map((pt, i) => (
+                  <div key={pt} className="log-point">
+                    <span>{String(i + 1).padStart(2, "0")}</span>
+                    <span>{pt}</span>
+                  </div>
+                ))}
               </div>
             </article>
 
@@ -343,24 +345,26 @@ export const Home = () => {
               onMouseEnter={() => setHoverCard("edu")}
               onMouseLeave={() => setHoverCard(null)}
             >
-              <LogoWell src={EDU_ROLE.logo} alt="St. Edward's University" shape={EDU_ROLE.logoShape} />
-              <div className="current-card__body">
-                <div className="current-card__meta">
-                  <span className="accent">B · Education</span>
-                  <span>{EDU_ROLE.when}</span>
+              <div className="current-card__meta">
+                <span className="accent">B · Education</span>
+                <span>{EDU_ROLE.when}</span>
+              </div>
+              <div className="current-card__main">
+                <LogoWell src={EDU_ROLE.logo} alt="St. Edward's University" shape="mark" />
+                <div>
+                  <div className="current-card__title">B.A., Computer Information Science</div>
+                  <div className="current-card__sub">
+                    St. Edward's University · Cum Laude · Austin, TX
+                  </div>
                 </div>
-                <div className="current-card__title">B.A., Computer Information Science</div>
-                <div className="current-card__sub">
-                  St. Edward's University · Cum Laude · Austin, TX
-                </div>
-                <div className="current-card__log">
-                  {EDU_ROLE.points.map((pt, i) => (
-                    <div key={pt} className="log-point">
-                      <span>{String(i + 1).padStart(2, "0")}</span>
-                      <span>{pt}</span>
-                    </div>
-                  ))}
-                </div>
+              </div>
+              <div className="current-card__log">
+                {EDU_ROLE.points.map((pt, i) => (
+                  <div key={pt} className="log-point">
+                    <span>{String(i + 1).padStart(2, "0")}</span>
+                    <span>{pt}</span>
+                  </div>
+                ))}
               </div>
             </article>
           </div>

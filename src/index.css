@@ -442,19 +442,16 @@ button.sheet-header__title { color: inherit; }
   letter-spacing: 0.14em;
 }
 
-.current-card .logo-well { margin-top: 18px; }
-
-.current-grid { display: grid; gap: 18px; }
+.current-grid { display: grid; gap: 14px; }
 .current-card {
   border: 1px solid rgba(28, 27, 25, 0.3);
-  padding: 22px 24px;
+  padding: 14px 16px 16px;
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
+  flex-direction: column;
+  gap: 10px;
   transition: border-color 200ms ease;
 }
 .current-card.is-open { border-color: var(--rust); }
-.current-card__body { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 10px; }
 .current-card__meta {
   display: flex;
   justify-content: space-between;
@@ -464,9 +461,26 @@ button.sheet-header__title { color: inherit; }
   text-transform: uppercase;
   color: var(--ink-50);
 }
+.current-card__main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.current-card .logo-well {
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  justify-content: center;
+}
+.current-card .logo-well img {
+  max-width: 32px;
+  max-height: 28px;
+  object-position: center;
+}
 .accent { color: var(--rust); }
-.current-card__title { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; }
-.current-card__sub { font-size: 15px; color: rgba(28, 27, 25, 0.78); }
+.current-card__title { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+.current-card__sub { font-size: 14px; color: rgba(28, 27, 25, 0.78); margin-top: 3px; }
 .current-card__log {
   display: grid;
   gap: 7px;
