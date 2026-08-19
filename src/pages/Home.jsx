@@ -102,6 +102,7 @@ export const Home = () => {
   const [hoverCard, setHoverCard] = useState(null);
   const [plotReplay, setPlotReplay] = useState(0);
   const [plotting, setPlotting] = useState(shouldPlotSheet);
+  const [entering, setEntering] = useState(false);
   const [discDragging, setDiscDragging] = useState(false);
   const [gridFlash, setGridFlash] = useState(false);
   const discRef = useRef(null);
@@ -145,6 +146,7 @@ export const Home = () => {
       return;
     }
     setPlotting(true);
+    setEntering(false);
     setPlotReplay((n) => n + 1);
     flash("Re-plotting sheet");
   };
@@ -211,12 +213,16 @@ export const Home = () => {
   const currentRole = WORK_ROLES[0];
 
   return (
-    <div className={`sheet${reduced ? " is-reduced" : ""}${gridFlash ? " is-grid-flash" : ""}${plotting ? " is-plotting" : ""}`}>
+    <div className={`sheet${reduced ? " is-reduced" : ""}${gridFlash ? " is-grid-flash" : ""}${plotting ? " is-plotting" : ""}${entering ? " is-entering" : ""}`}>
       <SmoothScroll reduced={reduced} paused={plotting || !!expanded || paletteOpen || discDragging} />
       <Plotter
         reduced={reduced}
         replay={plotReplay}
-        onDone={() => setPlotting(false)}
+        onDone={() => {
+          setPlotting(false);
+          setEntering(true);
+          window.setTimeout(() => setEntering(false), 1100);
+        }}
       />
 
       <header className="sheet-header">

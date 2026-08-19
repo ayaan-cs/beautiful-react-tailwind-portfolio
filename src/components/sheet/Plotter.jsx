@@ -96,7 +96,7 @@ export function Plotter({ reduced, replay = 0, onDone }) {
     if (!size.w || reduced) return undefined;
     setLayout(measureSheet(size.w, size.h));
     return undefined;
-  }, [size.w, size.h, reduced, phase, replay]);
+  }, [size.w, size.h, reduced, replay]);
 
   useEffect(() => {
     const settle = () => {

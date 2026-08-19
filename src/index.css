@@ -53,6 +53,10 @@ a:hover { color: var(--rust); }
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: none; }
 }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
 .sheet {
   position: relative;
@@ -84,7 +88,7 @@ a:hover { color: var(--rust); }
   transition: none;
 }
 .plotter.is-settled {
-  z-index: 1;
+  z-index: 35;
   pointer-events: none;
 }
 .plotter.is-settled .plotter__veil {
@@ -97,11 +101,7 @@ a:hover { color: var(--rust); }
   opacity: 0;
   pointer-events: none;
   animation: none;
-  transition: opacity 420ms ease;
-}
-.plotter.is-settled .plotter__path {
-  stroke: rgba(28, 27, 25, 0.22);
-  stroke-width: 1;
+  transition: opacity 720ms ease;
 }
 .plotter__svg {
   position: absolute;
@@ -170,6 +170,11 @@ a:hover { color: var(--rust); }
 .plotter__skip:hover { border-color: var(--rust); color: var(--rust); }
 
 .sheet.is-plotting > :not(.plotter) { opacity: 0; }
+.sheet.is-entering .sheet-header { animation: fadeIn 720ms ease both; }
+.sheet.is-entering .hero { animation: fadeIn 720ms ease 80ms both; }
+.sheet.is-entering .sheet-nav { animation: fadeIn 720ms ease 140ms both; }
+.sheet.is-entering .panel { animation: fadeIn 720ms ease 200ms both; }
+.sheet.is-entering .sheet-footer { animation: fadeIn 720ms ease 260ms both; }
 .hero, .panel, .sheet-footer { position: relative; z-index: 2; }
 
 .schematic-tools { display: flex; gap: 10px; }
@@ -206,7 +211,9 @@ a:hover { color: var(--rust); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tab-enter, .overlay--in, .plotter, .plotter__path, .plotter__title, .plotter__veil, .group-card, .note-card, .cert-card, .current-card {
+  .tab-enter, .overlay--in, .plotter, .plotter__path, .plotter__title, .plotter__veil, .group-card, .note-card, .cert-card, .current-card,
+  .sheet.is-entering .sheet-header, .sheet.is-entering .hero, .sheet.is-entering .sheet-nav,
+  .sheet.is-entering .panel, .sheet.is-entering .sheet-footer {
     animation: none;
     transition: none;
     transform: none;
@@ -221,7 +228,12 @@ a:hover { color: var(--rust); }
 .sheet.is-reduced .group-card,
 .sheet.is-reduced .note-card,
 .sheet.is-reduced .cert-card,
-.sheet.is-reduced .current-card {
+.sheet.is-reduced .current-card,
+.sheet.is-reduced.is-entering .sheet-header,
+.sheet.is-reduced.is-entering .hero,
+.sheet.is-reduced.is-entering .sheet-nav,
+.sheet.is-reduced.is-entering .panel,
+.sheet.is-reduced.is-entering .sheet-footer {
   animation: none;
   transition: none;
   transform: none;
