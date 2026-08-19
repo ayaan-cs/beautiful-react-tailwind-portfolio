@@ -5,7 +5,7 @@ import { ApplicationNotes } from "../components/sheet/ApplicationNotes";
 import { Disc } from "../components/sheet/Disc";
 import { LivePreview } from "../components/sheet/LivePreview";
 import { LogoWell } from "../components/sheet/LogoWell";
-import { Plotter, SHEET_PLOTTED_KEY } from "../components/sheet/Plotter";
+import { Plotter } from "../components/sheet/Plotter";
 import { Reticle } from "../components/sheet/Reticle";
 import { SkillSchematic } from "../components/sheet/SkillSchematic";
 import { SmoothScroll } from "../components/sheet/SmoothScroll";
@@ -43,8 +43,7 @@ const EXPAND_TITLES = {
 
 function shouldPlotSheet() {
   if (typeof window === "undefined") return false;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
-  return !sessionStorage.getItem(SHEET_PLOTTED_KEY);
+  return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
 function GhostLink({ href, children }) {
@@ -156,7 +155,14 @@ export const Home = () => {
           return !on;
         });
       } },
-      { id: "replot", label: "Re-plot sheet", kind: "Egg", mark: "PL", run: () => { setPlotReplay((n) => n + 1); flash("Re-plotting sheet"); } },
+      { id: "replot", label: "Re-plot sheet", kind: "Egg", mark: "PL", run: () => {
+        if (reduced) {
+          flash("Turn reduced motion off to re-plot");
+          return;
+        }
+        setPlotReplay((n) => n + 1);
+        flash("Re-plotting sheet");
+      } },
       { id: "cue", label: "Cue Side A", kind: "Egg", mark: "A", run: () => discRef.current?.toggle() },
     ];
 
@@ -221,6 +227,10 @@ export const Home = () => {
             type="button"
             className="sheet-header__title text-btn"
             onClick={() => {
+              if (reduced) {
+                flash("Turn reduced motion off to re-plot");
+                return;
+              }
               setPlotReplay((n) => n + 1);
               flash("Re-plotting sheet");
             }}

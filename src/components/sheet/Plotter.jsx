@@ -5,16 +5,17 @@ import { COORDS } from "../../data/portfolio";
 const DRAW_MS = 1700;
 const HOLD_MS = 320;
 const LIFT_MS = 560;
-export const SHEET_PLOTTED_KEY = "sheet-plotted-v2";
 
 function ease(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
 }
 
+function prefersReduced() {
+  return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 function initialPhase() {
-  if (typeof window === "undefined") return "gone";
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return "gone";
-  if (sessionStorage.getItem(SHEET_PLOTTED_KEY)) return "gone";
+  if (prefersReduced()) return "gone";
   return "draw";
 }
 
@@ -42,6 +43,7 @@ export function Plotter({ reduced, replay = 0, onDone }) {
   const pathRef = useRef(null);
   const headRef = useRef(null);
   const doneRef = useRef(onDone);
+  const finishRef = useRef(() => {});
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [phase, setPhase] = useState(initialPhase);
 
@@ -73,6 +75,12 @@ export function Plotter({ reduced, replay = 0, onDone }) {
     if (!path) return undefined;
 
     const len = path.getTotalLength();
+    if (!len) {
+      doneRef.current?.();
+      setPhase("gone");
+      return undefined;
+    }
+
     path.style.strokeDasharray = String(len);
     path.style.strokeDashoffset = String(len);
 
@@ -88,10 +96,10 @@ export function Plotter({ reduced, replay = 0, onDone }) {
       window.clearTimeout(hold);
       path.style.strokeDashoffset = "0";
       if (headRef.current) headRef.current.style.opacity = "0";
-      sessionStorage.setItem(SHEET_PLOTTED_KEY, "1");
       setPhase("lift");
       doneRef.current?.();
     };
+    finishRef.current = finish;
 
     const tick = (now) => {
       if (finished) return;
@@ -108,15 +116,16 @@ export function Plotter({ reduced, replay = 0, onDone }) {
     };
     raf = requestAnimationFrame(tick);
 
-    window.addEventListener("keydown", finish);
-    window.addEventListener("pointerdown", finish);
+    const onKey = (e) => {
+      if (e.key === "Escape" || e.key === "Enter") finish();
+    };
+    window.addEventListener("keydown", onKey);
 
     return () => {
       finished = true;
       cancelAnimationFrame(raf);
       window.clearTimeout(hold);
-      window.removeEventListener("keydown", finish);
-      window.removeEventListener("pointerdown", finish);
+      window.removeEventListener("keydown", onKey);
     };
   }, [phase, size.w, size.h]);
 
@@ -162,7 +171,9 @@ export function Plotter({ reduced, replay = 0, onDone }) {
         <b>Plotting</b>
         <span>Sheet 01</span>
         <span>Austin, TX</span>
-        <span>Click to skip</span>
+        <button type="button" className="plotter__skip" onClick={() => finishRef.current()}>
+          Skip
+        </button>
       </div>
     </div>
   );
