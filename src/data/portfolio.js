@@ -153,6 +153,9 @@ export const FILMS = [
   },
 ];
 
+/** Four covers on the Fig. C shelf. The rest of the pool rotates in weekly / on shuffle. */
+export const ALBUM_SHELF = 4;
+
 export const ALBUMS = [
   {
     title: "good kid, m.A.A.d city",
@@ -174,7 +177,121 @@ export const ALBUMS = [
     meta: "Salim–Sulaiman · 2007",
     src: "/uploads/images-851b0dd0.jpg",
   },
+  {
+    title: "Metaphorical Music",
+    meta: "Nujabes · 2003",
+    src: "/uploads/albums/nujabes-metaphorical.jpg",
+  },
+  {
+    title: "Aquemini",
+    meta: "OutKast · 1998",
+    src: "/uploads/albums/outkast-aquemini.jpg",
+  },
+  {
+    title: "Chasing Summer",
+    meta: "SiR · 2019",
+    src: "/uploads/albums/sir-chasing-summer.jpg",
+  },
+  {
+    title: "Kabhi Alvida Naa Kehna",
+    meta: "Shankar–Ehsaan–Loy · 2006",
+    src: "/uploads/albums/shankar-ehsaan-loy-kabhi-alvida-naa-kehna.jpg",
+  },
+  {
+    title: "Kal Ho Naa Ho",
+    meta: "Shankar–Ehsaan–Loy · 2003",
+    src: "/uploads/albums/shankar-ehsaan-loy-kal-ho-naa-ho.jpg",
+  },
+  {
+    title: "Discovery",
+    meta: "Daft Punk · 2001",
+    src: "/uploads/albums/daft-punk-discovery.jpg",
+  },
+  {
+    title: "Meteora",
+    meta: "Linkin Park · 2003",
+    src: "/uploads/albums/linkin-park-meteora.jpg",
+  },
+  {
+    title: "Hybrid Theory",
+    meta: "Linkin Park · 2000",
+    src: "/uploads/albums/linkin-park-hybrid-theory.jpg",
+  },
+  {
+    title: "The Fame",
+    meta: "Lady Gaga · 2008",
+    src: "/uploads/albums/lady-gaga-the-fame.jpg",
+  },
+  {
+    title: "Mind Over Matter",
+    meta: "Young the Giant · 2014",
+    src: "/uploads/albums/young-the-giant-mind-over-matter.jpg",
+  },
+  {
+    title: "Freudian",
+    meta: "Daniel Caesar · 2017",
+    src: "/uploads/albums/daniel-caesar-freudian.jpg",
+  },
+  {
+    title: "Malibu",
+    meta: "Anderson .Paak · 2016",
+    src: "/uploads/albums/anderson-paak-malibu.jpg",
+  },
+  {
+    title: "Faces",
+    meta: "Mac Miller · 2014",
+    src: "/uploads/albums/mac-miller-faces.jpg",
+  },
+  {
+    title: "Coke Studio",
+    meta: "Pakistan · Season 15",
+    src: "/uploads/albums/coke-studio-coke-studio.jpg",
+  },
 ];
+
+/** ISO week key (e.g. 2026-W34) so the shelf is the same for every visitor that week. */
+export function isoWeekKey(date = new Date()) {
+  const utc = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const day = utc.getUTCDay() || 7;
+  utc.setUTCDate(utc.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(utc.getUTCFullYear(), 0, 1));
+  const week = Math.ceil(((utc - yearStart) / 86400000 + 1) / 7);
+  return `${utc.getUTCFullYear()}-W${String(week).padStart(2, "0")}`;
+}
+
+function hashString(value) {
+  let h = 2166136261;
+  for (let i = 0; i < value.length; i += 1) {
+    h ^= value.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function mulberry32(seed) {
+  let a = seed;
+  return () => {
+    a += 0x6d2b79f5;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+export function pickAlbums(pool, count = ALBUM_SHELF, seed) {
+  const rng = mulberry32(hashString(String(seed)));
+  const copy = pool.slice();
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(rng() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy.slice(0, Math.min(count, copy.length));
+}
+
+export function weeklyAlbums(pool = ALBUMS, count = ALBUM_SHELF, date) {
+  return pickAlbums(pool, count, isoWeekKey(date));
+}
 
 export const TOOLS = [
   { id: "01", label: "Python", slug: "python" },

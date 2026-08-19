@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types, react/no-unescaped-entities */
 import { useEffect, useRef, useState } from "react";
+import { AlbumShelf } from "../components/sheet/AlbumShelf";
 import { ApplicationNotes } from "../components/sheet/ApplicationNotes";
 import { Disc } from "../components/sheet/Disc";
 import { LivePreview } from "../components/sheet/LivePreview";
@@ -9,7 +10,6 @@ import { Reticle } from "../components/sheet/Reticle";
 import { SkillSchematic } from "../components/sheet/SkillSchematic";
 import { SmoothScroll } from "../components/sheet/SmoothScroll";
 import {
-  ALBUMS,
   CERTS,
   COORDS,
   CV_FILENAME,
@@ -646,23 +646,7 @@ export const Home = () => {
                     <div className="fig-head">
                       <span>Fig. C — Favorite albums</span>
                     </div>
-                    <div className="taste-panel">
-                      <div className="taste-panel__bar">
-                        <span>Detail — Favorite albums</span>
-                      </div>
-                      <div className="covers">
-                        {ALBUMS.map((album) => (
-                          <div key={album.title}>
-                            <img src={album.src} alt={album.title} />
-                            <div>{album.title}</div>
-                            <div className="year">{album.meta}</div>
-                          </div>
-                        ))}
-                      </div>
-                      <p className="taste-panel__foot taste-panel__note">
-                        This changes every week, not concrete
-                      </p>
-                    </div>
+                    <AlbumShelf />
                   </div>
                 </div>
               </div>

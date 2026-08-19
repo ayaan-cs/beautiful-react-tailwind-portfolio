@@ -772,6 +772,10 @@ button.sheet-header__title { color: inherit; }
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   color: rgba(244, 246, 248, 0.6);
 }
+.taste-panel__week {
+  color: rgba(244, 246, 248, 0.45);
+  letter-spacing: 0.18em;
+}
 .taste-panel__foot:hover { color: #00e054; }
 .taste-panel__note {
   margin: 0;
@@ -779,6 +783,29 @@ button.sheet-header__title { color: inherit; }
   color: rgba(244, 246, 248, 0.55);
 }
 .taste-panel__note:hover { color: rgba(244, 246, 248, 0.55); }
+.taste-panel__albums-foot {
+  cursor: default;
+  color: rgba(244, 246, 248, 0.55);
+}
+.taste-panel__albums-foot:hover { color: rgba(244, 246, 248, 0.55); }
+.album-shuffle {
+  font: inherit;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: rgba(244, 246, 248, 0.86);
+  padding: 4px 10px;
+  cursor: pointer;
+}
+.album-shuffle:hover {
+  border-color: #00e054;
+  color: #00e054;
+}
+.album-shuffle:focus-visible {
+  outline: 1px solid #00e054;
+  outline-offset: 2px;
+}
 .lb-dots { display: flex; align-items: center; gap: 5px; color: rgba(244, 246, 248, 0.6); }
 .lb-dots i { width: 8px; height: 8px; border-radius: 50%; margin-left: -3px; }
 .lb-dots i:first-child { margin-left: 0; }
