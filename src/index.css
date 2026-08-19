@@ -101,7 +101,10 @@ a:hover { color: var(--rust); }
   opacity: 0;
   pointer-events: none;
   animation: none;
-  transition: opacity 720ms ease;
+  transition: opacity 420ms ease;
+}
+.plotter.is-settled .plotter__svg {
+  animation: lift 560ms ease 800ms forwards;
 }
 .plotter__svg {
   position: absolute;
@@ -175,7 +178,6 @@ a:hover { color: var(--rust); }
 .sheet.is-entering .sheet-nav { animation: fadeIn 720ms ease 140ms both; }
 .sheet.is-entering .panel { animation: fadeIn 720ms ease 200ms both; }
 .sheet.is-entering .sheet-footer { animation: fadeIn 720ms ease 260ms both; }
-.hero, .panel, .sheet-footer { position: relative; z-index: 2; }
 
 .schematic-tools { display: flex; gap: 10px; }
 .schematic-tools button {
@@ -211,7 +213,7 @@ a:hover { color: var(--rust); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tab-enter, .overlay--in, .plotter, .plotter__path, .plotter__title, .plotter__veil, .group-card, .note-card, .cert-card, .current-card,
+  .tab-enter, .overlay--in, .plotter, .plotter__path, .plotter__title, .plotter__svg, .plotter__veil, .group-card, .note-card, .cert-card, .current-card,
   .sheet.is-entering .sheet-header, .sheet.is-entering .hero, .sheet.is-entering .sheet-nav,
   .sheet.is-entering .panel, .sheet.is-entering .sheet-footer {
     animation: none;
@@ -224,6 +226,7 @@ a:hover { color: var(--rust); }
 .sheet.is-reduced .plotter,
 .sheet.is-reduced .plotter__path,
 .sheet.is-reduced .plotter__title,
+.sheet.is-reduced .plotter__svg,
 .sheet.is-reduced .plotter__veil,
 .sheet.is-reduced .group-card,
 .sheet.is-reduced .note-card,
@@ -298,7 +301,7 @@ button.sheet-header__title { color: inherit; }
 .text-btn:hover { color: var(--rust); }
 
 .hero, .panel { max-width: 1240px; margin: 0 auto; padding: 30px 64px 64px; }
-.hero { padding-top: 52px; padding-bottom: 30px; }
+.hero { padding-top: 52px; padding-bottom: 30px; position: relative; }
 .kicker {
   font-size: 11px;
   letter-spacing: 0.18em;

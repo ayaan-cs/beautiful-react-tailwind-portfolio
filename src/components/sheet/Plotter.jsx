@@ -4,6 +4,8 @@ import { COORDS } from "../../data/portfolio";
 
 const DRAW_MS = 1700;
 const HOLD_MS = 280;
+const SETTLE_MS = 800;
+const LIFT_MS = 560;
 
 function ease(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
@@ -165,6 +167,12 @@ export function Plotter({ reduced, replay = 0, onDone }) {
       window.removeEventListener("keydown", onKey);
     };
   }, [phase, layout?.d, replay]);
+
+  useEffect(() => {
+    if (phase !== "settled") return undefined;
+    const t = window.setTimeout(() => setPhase("gone"), SETTLE_MS + LIFT_MS);
+    return () => window.clearTimeout(t);
+  }, [phase]);
 
   if (reduced || phase === "gone") return null;
 
