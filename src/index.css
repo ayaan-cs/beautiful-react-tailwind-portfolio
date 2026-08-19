@@ -41,12 +41,92 @@ a:hover { color: var(--rust); }
   font-family: "IBM Plex Mono", ui-monospace, monospace;
 }
 
-.sheet {
-  position: relative;
-  min-height: 100vh;
-  background-color: var(--paper);
-  background-image: radial-gradient(rgba(28, 27, 25, 0.16) 1px, transparent 1px);
-  background-size: 22px 22px;
+@keyframes plot { to { stroke-dashoffset: 0; } }
+@keyframes lift { to { opacity: 0; visibility: hidden; } }
+@keyframes expandIn {
+  from { clip-path: inset(42% 8% 42% 8%); opacity: 0; }
+  to { clip-path: inset(0 0 0 0); opacity: 1; }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+.tab-enter { animation: fadeUp 420ms ease-out; }
+
+.overlay--in { animation: expandIn 460ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+.plotter {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: lift 420ms ease-in forwards;
+  animation-delay: 1150ms;
+}
+.plotter svg { display: block; overflow: visible; }
+.plotter__path {
+  stroke-dasharray: 2600;
+  stroke-dashoffset: 2600;
+  animation: plot 1150ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.stack-play { margin-top: 52px; }
+
+.schematic-tools { display: flex; gap: 10px; }
+.schematic-tools button {
+  font: inherit;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid rgba(28, 27, 25, 0.28);
+  padding: 4px 9px;
+  cursor: pointer;
+  color: var(--ink);
+}
+.schematic-tools button:hover { border-color: var(--rust); color: var(--rust); }
+.schematic-tools button:disabled { opacity: 0.35; cursor: default; }
+.schematic-tools button.is-on {
+  border-color: var(--rust);
+  color: var(--rust);
+  background: rgba(193, 68, 14, 0.08);
+}
+.schematic.is-dragging { user-select: none; }
+.schematic-node { cursor: grab; touch-action: none; }
+.schematic-node:active, .schematic.is-dragging .schematic-node { cursor: grabbing; }
+.schematic-node.is-loose rect { filter: drop-shadow(0 1px 0 rgba(193, 68, 14, 0.2)); }
+.schematic-node:focus-visible { outline: none; }
+.schematic-node:focus-visible rect { stroke: var(--rust); }
+
+.group-card, .note-card, .current-card, .tool-cell, .cert-card {
+  transition: border-color 200ms ease, transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.group-card:hover, .note-card:hover, .cert-card:hover {
+  border-color: rgba(193, 68, 14, 0.45);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab-enter, .overlay--in, .plotter, .plotter__path, .group-card, .note-card, .cert-card, .current-card {
+    animation: none;
+    transition: none;
+    transform: none;
+  }
+}
+.sheet.is-reduced .tab-enter,
+.sheet.is-reduced .overlay--in,
+.sheet.is-reduced .plotter,
+.sheet.is-reduced .plotter__path,
+.sheet.is-reduced .group-card,
+.sheet.is-reduced .note-card,
+.sheet.is-reduced .cert-card,
+.sheet.is-reduced .current-card {
+  animation: none;
+  transition: none;
+  transform: none;
 }
 
 .fiducial {
@@ -692,7 +772,7 @@ a:hover { color: var(--rust); }
   text-transform: uppercase;
   color: rgba(28, 27, 25, 0.62);
 }
-.schematic-frame__canvas { padding: 26px 30px 34px; overflow-x: auto; }
+.schematic-frame__canvas { padding: 26px 30px 34px; overflow: visible; }
 .schematic-frame__canvas svg { display: block; max-width: 980px; overflow: visible; }
 .schematic-bus {
   font-family: "IBM Plex Mono", ui-monospace, monospace;

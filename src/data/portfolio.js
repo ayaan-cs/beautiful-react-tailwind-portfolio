@@ -302,7 +302,7 @@ export function skillProjects(label) {
   ).map((p) => p.name);
 }
 
-export function schematicGeometry(categoryName, selected, accent = "#C1440E") {
+export function schematicGeometry(categoryName, selected, accent = "#C1440E", offsets = {}) {
   const cat = STACK_CATS.find((c) => c.name === categoryName) || STACK_CATS[0];
   const items = cat.items;
   const twoCol = items.length > 5;
@@ -315,6 +315,8 @@ export function schematicGeometry(categoryName, selected, accent = "#C1440E") {
   const riserX = 476;
   const busBottom = top + (rows - 1) * rowH;
   const feedY = top - 26;
+  const layoutW = twoCol ? 760 : 400;
+  const layoutH = busBottom + 60;
   const nodes = [];
   const traces = [];
 
@@ -328,32 +330,27 @@ export function schematicGeometry(categoryName, selected, accent = "#C1440E") {
   items.forEach((label, i) => {
     const col = twoCol ? Math.floor(i / rows) : 0;
     const r = twoCol ? i % rows : i;
-    const y = top + r * rowH;
-    const boxX = colBoxX[col];
+    const o = offsets[label] || { x: 0, y: 0 };
+    const y0 = top + r * rowH;
+    const boxX0 = colBoxX[col];
+    const y = y0 + o.y;
+    const boxX = boxX0 + o.x;
     const active = selected === label;
     const stroke = active ? accent : "#1C1B19";
     const startX = col === 0 ? busX : riserX;
     const midX = startX + (boxX - startX) / 2;
-    traces.push({
-      x1: startX,
-      y1: y,
-      x2: midX,
-      y2: y,
-      stroke: active ? accent : "rgba(28,27,25,0.5)",
-      w: active ? 2 : 1.1,
-    });
-    traces.push({
-      x1: midX,
-      y1: y,
-      x2: boxX,
-      y2: y,
-      stroke: active ? accent : "rgba(28,27,25,0.5)",
-      w: active ? 2 : 1.1,
-    });
+    const ink = active ? accent : "rgba(28,27,25,0.5)";
+    const w = active ? 2 : 1.1;
+
+    traces.push({ x1: startX, y1: y0, x2: midX, y2: y0, stroke: ink, w });
+    traces.push({ x1: midX, y1: y0, x2: midX, y2: y, stroke: ink, w });
+    traces.push({ x1: midX, y1: y, x2: boxX, y2: y, stroke: ink, w });
+
     nodes.push({
       label,
       ref: `${cat.ref}-${String(i + 1).padStart(2, "0")}`,
       y,
+      y0,
       boxX,
       boxY: y - 14,
       boxW,
@@ -361,6 +358,7 @@ export function schematicGeometry(categoryName, selected, accent = "#C1440E") {
       stroke,
       sw: active ? 1.8 : 1,
       fill: active ? "rgba(193,68,14,0.07)" : "rgba(246,241,231,0.95)",
+      loose: o.x !== 0 || o.y !== 0,
     });
   });
 
@@ -371,8 +369,8 @@ export function schematicGeometry(categoryName, selected, accent = "#C1440E") {
     busX,
     busTop: feedY,
     busBottom,
-    height: busBottom + 60,
+    height: layoutH,
     twoCol,
-    viewBox: `0 0 ${twoCol ? 760 : 400} ${busBottom + 60}`,
+    viewBox: `0 0 ${layoutW} ${layoutH}`,
   };
 }

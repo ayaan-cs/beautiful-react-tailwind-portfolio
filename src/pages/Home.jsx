@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { ApplicationNotes } from "../components/sheet/ApplicationNotes";
 import { LivePreview } from "../components/sheet/LivePreview";
 import { LogoWell } from "../components/sheet/LogoWell";
+import { Plotter } from "../components/sheet/Plotter";
 import { Reticle } from "../components/sheet/Reticle";
 import { SkillSchematic } from "../components/sheet/SkillSchematic";
+import { SmoothScroll } from "../components/sheet/SmoothScroll";
 import {
   ALBUMS,
   CERTS,
@@ -190,7 +192,9 @@ export const Home = () => {
   const currentRole = WORK_ROLES[0];
 
   return (
-    <div className="sheet">
+    <div className={reduced ? "sheet is-reduced" : "sheet"}>
+      <SmoothScroll reduced={reduced} paused={!!expanded || paletteOpen} />
+      <Plotter reduced={reduced} />
       <Fiducial className="fiducial--tl" />
       <Fiducial className="fiducial--br" />
 
@@ -255,6 +259,7 @@ export const Home = () => {
         </div>
       </nav>
 
+      <div key={tab} className={reduced ? undefined : "tab-enter"}>
       {tab === "about" && (
         <section className="panel">
           <div className="panel-head">
@@ -381,6 +386,9 @@ export const Home = () => {
               </div>
             ))}
           </div>
+          <div className="stack-play">
+            <SkillSchematic playable />
+          </div>
         </section>
       )}
 
@@ -480,6 +488,7 @@ export const Home = () => {
           </div>
         </section>
       )}
+      </div>
 
       <footer className="sheet-footer">
         <span>Designed by Ayaan Syed · scale 1:1</span>
@@ -494,7 +503,7 @@ export const Home = () => {
       </footer>
 
       {expanded && (
-        <div className="overlay" role="dialog" aria-modal="true">
+        <div className={reduced ? "overlay" : "overlay overlay--in"} role="dialog" aria-modal="true">
           <div className="overlay-bar">
             <span>{EXPAND_TITLES[expanded]}</span>
             <button type="button" className="ghost-btn" onClick={closeSheet}>
@@ -642,7 +651,7 @@ export const Home = () => {
 
             {expanded === "stack" && (
               <div className="stack-full">
-                <SkillSchematic />
+                <SkillSchematic playable />
                 <div>
                   <div className="fig-head">
                     <span>Full schedule of components</span>

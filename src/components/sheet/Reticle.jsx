@@ -11,19 +11,39 @@ export function Reticle({ enabled }) {
 
     document.body.classList.add("hide-native-cursor");
     const el = elRef.current;
+    const pos = { x: 0, y: 0 };
+    const cur = { x: 0, y: 0 };
+    let visible = false;
+    let raf = 0;
+
+    const tick = () => {
+      cur.x += (pos.x - cur.x) * 0.28;
+      cur.y += (pos.y - cur.y) * 0.28;
+      if (el) {
+        el.style.transform = `translate(${cur.x}px, ${cur.y}px)`;
+        el.style.opacity = visible ? "1" : "0";
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
 
     const move = (e) => {
-      if (!el) return;
-      el.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-      el.style.opacity = "1";
+      pos.x = e.clientX;
+      pos.y = e.clientY;
+      if (!visible) {
+        cur.x = e.clientX;
+        cur.y = e.clientY;
+        visible = true;
+      }
     };
     const leave = () => {
-      if (el) el.style.opacity = "0";
+      visible = false;
     };
 
     document.addEventListener("mousemove", move, true);
     document.addEventListener("mouseleave", leave);
     return () => {
+      cancelAnimationFrame(raf);
       document.body.classList.remove("hide-native-cursor");
       document.removeEventListener("mousemove", move, true);
       document.removeEventListener("mouseleave", leave);
