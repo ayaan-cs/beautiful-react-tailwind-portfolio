@@ -386,9 +386,6 @@ export const Home = () => {
               </div>
             ))}
           </div>
-          <div className="stack-play">
-            <SkillSchematic playable />
-          </div>
         </section>
       )}
 
