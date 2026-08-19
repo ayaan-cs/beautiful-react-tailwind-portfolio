@@ -659,6 +659,9 @@ export const Home = () => {
                           </div>
                         ))}
                       </div>
+                      <p className="taste-panel__foot taste-panel__note">
+                        This changes every week, not concrete
+                      </p>
                     </div>
                   </div>
                 </div>

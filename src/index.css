@@ -743,13 +743,15 @@ button.sheet-header__title { color: inherit; }
 .cert-card__issuer { font-size: 13.5px; color: rgba(28, 27, 25, 0.72); }
 .cert-card__skills { font-size: 10.5px; line-height: 1.6; color: rgba(28, 27, 25, 0.62); }
 
-.taste-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 40px; }
+.taste-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 40px; align-items: stretch; }
+.taste-grid > div { display: flex; flex-direction: column; min-height: 0; }
 .taste-panel {
   border: 1px solid rgba(28, 27, 25, 0.3);
   background: #14181c;
   color: #f4f6f8;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 .taste-panel__bar, .taste-panel__foot {
   display: flex;
@@ -771,6 +773,12 @@ button.sheet-header__title { color: inherit; }
   color: rgba(244, 246, 248, 0.6);
 }
 .taste-panel__foot:hover { color: #00e054; }
+.taste-panel__note {
+  margin: 0;
+  cursor: default;
+  color: rgba(244, 246, 248, 0.55);
+}
+.taste-panel__note:hover { color: rgba(244, 246, 248, 0.55); }
 .lb-dots { display: flex; align-items: center; gap: 5px; color: rgba(244, 246, 248, 0.6); }
 .lb-dots i { width: 8px; height: 8px; border-radius: 50%; margin-left: -3px; }
 .lb-dots i:first-child { margin-left: 0; }
