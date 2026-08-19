@@ -167,10 +167,13 @@ export function SkillSchematic({ playable = true }) {
     >
       <div className="fig-head">
         <span>Fig. A — Schematic, skill graph</span>
-        <span className="mute">
+        <span className="mute schematic-copy schematic-copy--desk">
           {playable
             ? "Drag the junctions · scatter or fan the traces · click for usage"
             : "Filter by category · click a junction"}
+        </span>
+        <span className="mute schematic-copy schematic-copy--hand">
+          Tap a junction for usage
         </span>
       </div>
 
@@ -197,19 +200,22 @@ export function SkillSchematic({ playable = true }) {
         <div className="schematic-frame__bar">
           <span>Dwg. A-{g.cat.ref} · {g.cat.name}</span>
           {playable ? (
-            <span className="schematic-tools">
-              <button type="button" onClick={scatter}>Scatter</button>
-              <button type="button" onClick={fan}>Fan</button>
-              <button
-                type="button"
-                className={snap ? "is-on" : ""}
-                aria-pressed={snap}
-                onClick={() => setSnap((on) => !on)}
-              >
-                Snap
-              </button>
-              <button type="button" onClick={reset} disabled={!dirty}>Re-plot</button>
-            </span>
+            <>
+              <span className="schematic-tools">
+                <button type="button" onClick={scatter}>Scatter</button>
+                <button type="button" onClick={fan}>Fan</button>
+                <button
+                  type="button"
+                  className={snap ? "is-on" : ""}
+                  aria-pressed={snap}
+                  onClick={() => setSnap((on) => !on)}
+                >
+                  Snap
+                </button>
+                <button type="button" onClick={reset} disabled={!dirty}>Re-plot</button>
+              </span>
+              <span className="schematic-hand-note">{g.cat.items.length} nodes · tap a junction</span>
+            </>
           ) : (
             <span>{g.cat.items.length} nodes · click a junction for usage</span>
           )}
@@ -266,6 +272,39 @@ export function SkillSchematic({ playable = true }) {
             ))}
           </svg>
         </div>
+        <ul className="schematic-list">
+          {g.nodes.map((n) => {
+            const on = selected === n.label;
+            const used = on ? skillProjects(n.label) : [];
+            return (
+              <li key={n.ref} className={on ? "is-on" : ""}>
+                <button
+                  type="button"
+                  aria-expanded={on}
+                  onClick={() => setSelected(on ? null : n.label)}
+                >
+                  <span className="schematic-list__ref">{n.ref}</span>
+                  <span className="schematic-list__label">{n.label}</span>
+                  <span className="schematic-list__mark" aria-hidden="true">{on ? "−" : "+"}</span>
+                </button>
+                {on && (
+                  <div className="schematic-list__detail">
+                    <div className="mute">Used in</div>
+                    {used.length > 0 ? (
+                      <div className="schematic-chips">
+                        {used.map((p) => (
+                          <span key={p}><i />{p}</span>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="mute">Reserved · project write-up pending.</span>
+                    )}
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
         <div className="schematic-legend">
           {selected ? (
             <div className="schematic-legend__row">

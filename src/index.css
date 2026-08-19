@@ -72,13 +72,37 @@ a:hover { color: var(--rust); }
 .plotter {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 80;
+  pointer-events: auto;
+}
+.plotter__veil {
+  position: absolute;
+  inset: 0;
   background-color: var(--paper);
   background-image: radial-gradient(rgba(28, 27, 25, 0.16) 1px, transparent 1px);
   background-size: 22px 22px;
-  pointer-events: auto;
+  transition: none;
 }
-.plotter.is-done { animation: lift 560ms ease-in forwards; }
+.plotter.is-settled {
+  z-index: 1;
+  pointer-events: none;
+}
+.plotter.is-settled .plotter__veil {
+  opacity: 0;
+  transition: opacity 720ms ease;
+}
+.plotter.is-settled .plotter__title,
+.plotter.is-settled .plotter__meta,
+.plotter.is-settled .plotter__head {
+  opacity: 0;
+  pointer-events: none;
+  animation: none;
+  transition: opacity 420ms ease;
+}
+.plotter.is-settled .plotter__path {
+  stroke: rgba(28, 27, 25, 0.22);
+  stroke-width: 1;
+}
 .plotter__svg {
   position: absolute;
   inset: 0;
@@ -146,11 +170,7 @@ a:hover { color: var(--rust); }
 .plotter__skip:hover { border-color: var(--rust); color: var(--rust); }
 
 .sheet.is-plotting > :not(.plotter) { opacity: 0; }
-.sheet.is-entering .sheet-header { animation: fadeUp 560ms ease-out both; }
-.sheet.is-entering .hero { animation: fadeUp 560ms ease-out 80ms both; }
-.sheet.is-entering .sheet-nav { animation: fadeUp 560ms ease-out 140ms both; }
-.sheet.is-entering .panel { animation: fadeUp 560ms ease-out 200ms both; }
-.sheet.is-entering .sheet-footer { animation: fadeUp 560ms ease-out 260ms both; }
+.hero, .panel, .sheet-footer { position: relative; z-index: 2; }
 
 .schematic-tools { display: flex; gap: 10px; }
 .schematic-tools button {
@@ -186,9 +206,7 @@ a:hover { color: var(--rust); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tab-enter, .overlay--in, .plotter, .plotter__path, .plotter__title, .group-card, .note-card, .cert-card, .current-card,
-  .sheet.is-entering .sheet-header, .sheet.is-entering .hero, .sheet.is-entering .sheet-nav,
-  .sheet.is-entering .panel, .sheet.is-entering .sheet-footer {
+  .tab-enter, .overlay--in, .plotter, .plotter__path, .plotter__title, .plotter__veil, .group-card, .note-card, .cert-card, .current-card {
     animation: none;
     transition: none;
     transform: none;
@@ -199,15 +217,11 @@ a:hover { color: var(--rust); }
 .sheet.is-reduced .plotter,
 .sheet.is-reduced .plotter__path,
 .sheet.is-reduced .plotter__title,
+.sheet.is-reduced .plotter__veil,
 .sheet.is-reduced .group-card,
 .sheet.is-reduced .note-card,
 .sheet.is-reduced .cert-card,
-.sheet.is-reduced .current-card,
-.sheet.is-reduced.is-entering .sheet-header,
-.sheet.is-reduced.is-entering .hero,
-.sheet.is-reduced.is-entering .sheet-nav,
-.sheet.is-reduced.is-entering .panel,
-.sheet.is-reduced.is-entering .sheet-footer {
+.sheet.is-reduced .current-card {
   animation: none;
   transition: none;
   transform: none;
@@ -272,7 +286,7 @@ button.sheet-header__title { color: inherit; }
 .text-btn:hover { color: var(--rust); }
 
 .hero, .panel { max-width: 1240px; margin: 0 auto; padding: 30px 64px 64px; }
-.hero { padding-top: 52px; padding-bottom: 30px; position: relative; }
+.hero { padding-top: 52px; padding-bottom: 30px; }
 .kicker {
   font-size: 11px;
   letter-spacing: 0.18em;
@@ -1013,6 +1027,61 @@ button.sheet-header__title { color: inherit; }
 }
 .schematic-chips i { width: 6px; height: 6px; border-radius: 50%; background: var(--rust); }
 
+.schematic-copy--hand,
+.schematic-hand-note,
+.schematic-list { display: none; }
+.schematic-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.schematic-list li {
+  border-bottom: 1px dashed rgba(28, 27, 25, 0.16);
+}
+.schematic-list li:last-child { border-bottom: 0; }
+.schematic-list button {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: var(--ink);
+}
+.schematic-list li.is-on { background: rgba(193, 68, 14, 0.06); }
+.schematic-list__ref {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--rust);
+  flex: none;
+}
+.schematic-list__label {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+}
+.schematic-list__mark {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 14px;
+  color: rgba(28, 27, 25, 0.45);
+  flex: none;
+}
+.schematic-list__detail {
+  padding: 0 16px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
 .app-notes__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1261,4 +1330,23 @@ button.sheet-header__title { color: inherit; }
   .hero-disc__cap { text-align: left; max-width: none; }
   .hero-rule { flex-wrap: wrap; max-width: none; }
   .hero-rule__label { white-space: normal; }
+
+  .schematic-copy--desk { display: none; }
+  .schematic-copy--hand { display: inline; }
+  .schematic-tools,
+  .schematic-frame__canvas,
+  .schematic-legend { display: none; }
+  .schematic-hand-note { display: inline; }
+  .schematic-list { display: block; }
+  .schematic-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin: 0 -20px 18px;
+    padding: 0 20px 8px;
+  }
+  .schematic-tabs::-webkit-scrollbar { display: none; }
+  .schematic-tabs button { flex: none; }
+  .schematic-frame__bar { flex-wrap: wrap; }
 }

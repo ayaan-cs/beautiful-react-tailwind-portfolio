@@ -3,8 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { COORDS } from "../../data/portfolio";
 
 const DRAW_MS = 1700;
-const HOLD_MS = 320;
-const LIFT_MS = 560;
+const HOLD_MS = 280;
 
 function ease(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
@@ -19,24 +18,46 @@ function initialPhase() {
   return "draw";
 }
 
-function sheetPath(width, height) {
-  const m = Math.round(Math.min(width, height) * 0.045);
-  const x = m;
-  const y = m;
-  const rw = width - 2 * m;
-  const rh = height - 2 * m;
-  const title = y + 52;
-  const col = x + Math.round(rw * 0.26);
-  const mid = y + Math.round(rh * 0.5);
-  const col2 = x + Math.round(rw * 0.64);
-  const d = [
-    `M${x} ${y} H${x + rw} V${y + rh} H${x} Z`,
-    `M${x} ${title} H${x + rw}`,
-    `M${col} ${title} V${y + rh}`,
-    `M${col} ${mid} H${x + rw}`,
-    `M${col2} ${mid} V${y + rh}`,
-  ].join(" ");
-  return { d, x, y, rw, title };
+function measureSheet(width, height) {
+  const inset = 8;
+  const header = document.querySelector(".sheet-header");
+  const hero = document.querySelector(".hero");
+  const nav = document.querySelector(".sheet-nav");
+  const footer = document.querySelector(".sheet-footer");
+  const headerBox = header?.getBoundingClientRect();
+  const heroBox = hero?.getBoundingClientRect();
+  const navBox = nav?.getBoundingClientRect();
+  const footerBox = footer?.getBoundingClientRect();
+  const headerPad = header ? parseFloat(getComputedStyle(header).paddingLeft) || 64 : 64;
+  const heroPad = hero ? parseFloat(getComputedStyle(hero).paddingLeft) || 64 : 64;
+
+  const titleY = headerBox ? Math.round(headerBox.bottom) + 0.5 : 47.5;
+  const titleTextY = headerBox
+    ? Math.round((headerBox.top + headerBox.bottom) / 2) + 4
+    : 28;
+  const titleX = headerBox ? Math.round(headerBox.left + headerPad) : 64;
+  const titleEndX = headerBox ? Math.round(headerBox.right - headerPad) : width - 64;
+
+  let colL = heroPad + 0.5;
+  let colR = width - heroPad - 0.5;
+  if (heroBox) {
+    colL = Math.round(heroBox.left + heroPad) + 0.5;
+    colR = Math.round(heroBox.right - heroPad) - 0.5;
+  }
+
+  const bottomY = height - inset;
+  const parts = [
+    `M${inset} ${inset} H${width - inset} V${height - inset} H${inset} Z`,
+    `M${inset} ${titleY} H${width - inset}`,
+    `M${colL} ${titleY} V${bottomY}`,
+    `M${colR} ${titleY} V${bottomY}`,
+  ];
+  if (navBox) parts.push(`M${colL} ${Math.round(navBox.bottom) + 0.5} H${colR}`);
+  if (footerBox && footerBox.top < height) {
+    parts.push(`M${colL} ${Math.round(footerBox.top) + 0.5} H${colR}`);
+  }
+
+  return { d: parts.join(" "), titleY, titleTextY, titleX, titleEndX };
 }
 
 export function Plotter({ reduced, replay = 0, onDone }) {
@@ -46,6 +67,7 @@ export function Plotter({ reduced, replay = 0, onDone }) {
   const finishRef = useRef(() => {});
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [phase, setPhase] = useState(initialPhase);
+  const [layout, setLayout] = useState(null);
 
   doneRef.current = onDone;
 
@@ -67,17 +89,35 @@ export function Plotter({ reduced, replay = 0, onDone }) {
       return undefined;
     }
     if (replay > 0) setPhase("draw");
+    return undefined;
   }, [reduced, replay]);
 
   useEffect(() => {
-    if (phase !== "draw" || !size.w) return undefined;
+    if (!size.w || reduced) return undefined;
+    setLayout(measureSheet(size.w, size.h));
+    return undefined;
+  }, [size.w, size.h, reduced, phase, replay]);
+
+  useEffect(() => {
+    const settle = () => {
+      const path = pathRef.current;
+      if (path) {
+        path.style.strokeDashoffset = "0";
+        path.style.strokeDasharray = "none";
+      }
+      if (headRef.current) headRef.current.style.opacity = "0";
+      setPhase("settled");
+      doneRef.current?.();
+    };
+    finishRef.current = settle;
+
+    if (phase !== "draw" || !layout?.d) return undefined;
     const path = pathRef.current;
     if (!path) return undefined;
 
     const len = path.getTotalLength();
     if (!len) {
-      doneRef.current?.();
-      setPhase("gone");
+      settle();
       return undefined;
     }
 
@@ -94,10 +134,7 @@ export function Plotter({ reduced, replay = 0, onDone }) {
       finished = true;
       cancelAnimationFrame(raf);
       window.clearTimeout(hold);
-      path.style.strokeDashoffset = "0";
-      if (headRef.current) headRef.current.style.opacity = "0";
-      setPhase("lift");
-      doneRef.current?.();
+      settle();
     };
     finishRef.current = finish;
 
@@ -127,26 +164,25 @@ export function Plotter({ reduced, replay = 0, onDone }) {
       window.clearTimeout(hold);
       window.removeEventListener("keydown", onKey);
     };
-  }, [phase, size.w, size.h]);
-
-  useEffect(() => {
-    if (phase !== "lift") return undefined;
-    const t = window.setTimeout(() => setPhase("gone"), LIFT_MS);
-    return () => window.clearTimeout(t);
-  }, [phase]);
+  }, [phase, layout?.d, replay]);
 
   if (reduced || phase === "gone") return null;
 
-  const g = size.w ? sheetPath(size.w, size.h) : null;
+  const g = layout || (size.w ? measureSheet(size.w, size.h) : null);
 
   return (
-    <div className={`plotter${phase === "lift" ? " is-done" : ""}`} aria-hidden="true">
-      {g && (
+    <div
+      className={`plotter${phase === "settled" ? " is-settled" : ""}`}
+      aria-hidden={phase === "settled"}
+    >
+      <div className="plotter__veil" />
+      {g && size.w > 0 && (
         <svg
           className="plotter__svg"
           width={size.w}
           height={size.h}
           viewBox={`0 0 ${size.w} ${size.h}`}
+          preserveAspectRatio="none"
         >
           <path ref={pathRef} className="plotter__path" d={g.d} />
           <g ref={headRef} className="plotter__head" opacity="0">
@@ -154,13 +190,13 @@ export function Plotter({ reduced, replay = 0, onDone }) {
             <line x1="0" y1="-7" x2="0" y2="7" />
             <circle r="4.5" />
           </g>
-          <text className="plotter__title" x={g.x + 14} y={g.title - 18}>
+          <text className="plotter__title" x={g.titleX} y={g.titleTextY}>
             Sheet 01 — Ayaan Syed&apos;s Portfolio
           </text>
           <text
             className="plotter__title plotter__title--mute"
-            x={g.x + g.rw - 14}
-            y={g.title - 18}
+            x={g.titleEndX}
+            y={g.titleTextY}
             textAnchor="end"
           >
             {COORDS}

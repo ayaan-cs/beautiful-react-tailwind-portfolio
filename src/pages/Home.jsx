@@ -102,7 +102,6 @@ export const Home = () => {
   const [hoverCard, setHoverCard] = useState(null);
   const [plotReplay, setPlotReplay] = useState(0);
   const [plotting, setPlotting] = useState(shouldPlotSheet);
-  const [entering, setEntering] = useState(false);
   const [discDragging, setDiscDragging] = useState(false);
   const [gridFlash, setGridFlash] = useState(false);
   const discRef = useRef(null);
@@ -140,6 +139,16 @@ export const Home = () => {
   const openSheet = (which) => setExpanded(which);
   const closeSheet = () => setExpanded(null);
 
+  const startPlot = () => {
+    if (reduced) {
+      flash("Turn reduced motion off to re-plot");
+      return;
+    }
+    setPlotting(true);
+    setPlotReplay((n) => n + 1);
+    flash("Re-plotting sheet");
+  };
+
   const actions = [
       { id: "about", label: "Go to / expand About", kind: "Nav", mark: "01", run: () => { setTab("about"); openSheet("about"); } },
       { id: "stack", label: "Go to / expand Stack", kind: "Nav", mark: "02", run: () => { setTab("stack"); openSheet("stack"); } },
@@ -155,14 +164,7 @@ export const Home = () => {
           return !on;
         });
       } },
-      { id: "replot", label: "Re-plot sheet", kind: "Egg", mark: "PL", run: () => {
-        if (reduced) {
-          flash("Turn reduced motion off to re-plot");
-          return;
-        }
-        setPlotReplay((n) => n + 1);
-        flash("Re-plotting sheet");
-      } },
+      { id: "replot", label: "Re-plot sheet", kind: "Egg", mark: "PL", run: startPlot },
       { id: "cue", label: "Cue Side A", kind: "Egg", mark: "A", run: () => discRef.current?.toggle() },
     ];
 
@@ -209,16 +211,12 @@ export const Home = () => {
   const currentRole = WORK_ROLES[0];
 
   return (
-    <div className={`sheet${reduced ? " is-reduced" : ""}${gridFlash ? " is-grid-flash" : ""}${plotting ? " is-plotting" : ""}${entering ? " is-entering" : ""}`}>
+    <div className={`sheet${reduced ? " is-reduced" : ""}${gridFlash ? " is-grid-flash" : ""}${plotting ? " is-plotting" : ""}`}>
       <SmoothScroll reduced={reduced} paused={plotting || !!expanded || paletteOpen || discDragging} />
       <Plotter
         reduced={reduced}
         replay={plotReplay}
-        onDone={() => {
-          setPlotting(false);
-          setEntering(true);
-          window.setTimeout(() => setEntering(false), 900);
-        }}
+        onDone={() => setPlotting(false)}
       />
 
       <header className="sheet-header">
@@ -226,14 +224,7 @@ export const Home = () => {
           <button
             type="button"
             className="sheet-header__title text-btn"
-            onClick={() => {
-              if (reduced) {
-                flash("Turn reduced motion off to re-plot");
-                return;
-              }
-              setPlotReplay((n) => n + 1);
-              flash("Re-plotting sheet");
-            }}
+            onClick={startPlot}
           >
             Sheet 01 — Ayaan Syed's Portfolio
           </button>
