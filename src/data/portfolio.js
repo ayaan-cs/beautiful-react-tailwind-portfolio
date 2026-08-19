@@ -11,7 +11,8 @@ export const PAW_HAVEN_URL = "https://pawhavenpetsitting.com";
 export const WORK_ROLES = [
   {
     mark: "HEB",
-    logo: "/icons/mark-heb.png",
+    logo: "/assets/heb-logo.svg",
+    logoShape: "wordmark",
     org: "H-E-B Digital",
     title: "Software Engineer",
     when: "Jun 2026 – Present",
@@ -25,7 +26,8 @@ export const WORK_ROLES = [
   },
   {
     mark: "SAS",
-    logo: "/icons/mark-samsung.png",
+    logo: "/assets/samsung-logo.svg",
+    logoShape: "wordmark",
     org: "Samsung Austin Semiconductor",
     title: "Manufacturing Technician",
     when: "Feb 2026 – June 2026",
@@ -40,6 +42,7 @@ export const WORK_ROLES = [
   {
     mark: "KSP",
     logo: "/icons/mark-klein.png",
+    logoShape: "mark",
     org: "Klein Sports Performance, LLC",
     title: "AI Research Lead Intern",
     when: "Sep 2024 – Aug 2025",
@@ -53,7 +56,8 @@ export const WORK_ROLES = [
   },
   {
     mark: "USD",
-    logo: "/icons/mark-usda.png",
+    logo: "/assets/usda-logo.svg",
+    logoShape: "mark",
     org: "U.S. Department of Agriculture — Forest Service",
     title: "Data Science Intern",
     when: "Jun 2024 – Aug 2024",
@@ -70,6 +74,7 @@ export const WORK_ROLES = [
 export const EDU_ROLE = {
   mark: "EDU",
   logo: "/icons/mark-stedwards.png",
+  logoShape: "mark",
   org: "St. Edward's University",
   title: "B.A., Computer Information Science · Cum Laude",
   when: "Aug 2022 – Dec 2025",

@@ -66,7 +66,7 @@ function FreelanceNote() {
 function ExperienceRow({ role }) {
   return (
     <div className="log-row">
-      <LogoWell src={role.logo} alt={role.org} />
+      <LogoWell src={role.logo} alt={role.org} shape={role.logoShape} />
       <div>
         <div className="log-row__org">{role.org}</div>
         <div className="log-row__title">{role.title}</div>
@@ -317,7 +317,7 @@ export const Home = () => {
               onMouseEnter={() => setHoverCard("role")}
               onMouseLeave={() => setHoverCard(null)}
             >
-              <LogoWell src={currentRole.logo} alt="H-E-B" />
+              <LogoWell src={currentRole.logo} alt="H-E-B" shape={currentRole.logoShape} />
               <div className="current-card__body">
                 <div className="current-card__meta">
                   <span className="accent">A · Role</span>
@@ -343,7 +343,7 @@ export const Home = () => {
               onMouseEnter={() => setHoverCard("edu")}
               onMouseLeave={() => setHoverCard(null)}
             >
-              <LogoWell src={EDU_ROLE.logo} alt="St. Edward's University" />
+              <LogoWell src={EDU_ROLE.logo} alt="St. Edward's University" shape={EDU_ROLE.logoShape} />
               <div className="current-card__body">
                 <div className="current-card__meta">
                   <span className="accent">B · Education</span>

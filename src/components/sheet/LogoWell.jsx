@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-export function LogoWell({ src, alt }) {
+export function LogoWell({ src, alt, shape = "wordmark" }) {
   return (
-    <div className="logo-well">
+    <div className={`logo-well logo-well--${shape}`}>
       {src ? (
         <img src={src} alt={alt || ""} />
       ) : (
