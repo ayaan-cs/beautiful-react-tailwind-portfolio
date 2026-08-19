@@ -1,12 +1,20 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 
-export function Plotter({ reduced }) {
+export function Plotter({ reduced, replay = 0 }) {
   const [show, setShow] = useState(() => {
     if (typeof window === "undefined") return false;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
     return !sessionStorage.getItem("sheet-plotted");
   });
+
+  useEffect(() => {
+    if (reduced) {
+      setShow(false);
+      return undefined;
+    }
+    if (replay > 0) setShow(true);
+  }, [reduced, replay]);
 
   useEffect(() => {
     if (reduced) {

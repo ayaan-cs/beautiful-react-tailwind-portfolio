@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types, react/no-unescaped-entities */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ApplicationNotes } from "../components/sheet/ApplicationNotes";
+import { Disc } from "../components/sheet/Disc";
 import { LivePreview } from "../components/sheet/LivePreview";
 import { LogoWell } from "../components/sheet/LogoWell";
 import { Plotter } from "../components/sheet/Plotter";
@@ -94,6 +95,10 @@ export const Home = () => {
   const [toast, setToast] = useState(null);
   const [reduced, setReduced] = useState(false);
   const [hoverCard, setHoverCard] = useState(null);
+  const [plotReplay, setPlotReplay] = useState(0);
+  const [discDragging, setDiscDragging] = useState(false);
+  const [gridFlash, setGridFlash] = useState(false);
+  const discRef = useRef(null);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -137,6 +142,8 @@ export const Home = () => {
       { id: "linkedin", label: "Open LinkedIn", kind: "Link", mark: "IN", run: () => window.open("https://linkedin.com/in/ayaan-syed", "_blank", "noopener") },
       { id: "cv", label: "Download CV", kind: "Util", mark: "CV", run: () => window.open(CV_URL, "_blank", "noopener") },
       { id: "email", label: "Copy email", kind: "Util", mark: "@", run: copyEmail },
+      { id: "replot", label: "Re-plot sheet", kind: "Egg", mark: "PL", run: () => { setPlotReplay((n) => n + 1); flash("Re-plotting sheet"); } },
+      { id: "cue", label: "Cue Side A", kind: "Egg", mark: "A", run: () => discRef.current?.toggle() },
     ];
 
   const filtered = actions.filter((a) => {
@@ -182,13 +189,22 @@ export const Home = () => {
   const currentRole = WORK_ROLES[0];
 
   return (
-    <div className={reduced ? "sheet is-reduced" : "sheet"}>
-      <SmoothScroll reduced={reduced} paused={!!expanded || paletteOpen} />
-      <Plotter reduced={reduced} />
+    <div className={`sheet${reduced ? " is-reduced" : ""}${gridFlash ? " is-grid-flash" : ""}`}>
+      <SmoothScroll reduced={reduced} paused={!!expanded || paletteOpen || discDragging} />
+      <Plotter reduced={reduced} replay={plotReplay} />
 
       <header className="sheet-header">
         <div className="sheet-header__left">
-          <span className="sheet-header__title">Sheet 01 — Ayaan Syed's Portfolio</span>
+          <button
+            type="button"
+            className="sheet-header__title text-btn"
+            onClick={() => {
+              setPlotReplay((n) => n + 1);
+              flash("Re-plotting sheet");
+            }}
+          >
+            Sheet 01 — Ayaan Syed's Portfolio
+          </button>
           <span className="mute">Rev. 2026.08</span>
         </div>
         <div className="sheet-header__right">
@@ -229,6 +245,7 @@ export const Home = () => {
           <div className="hero-rule__line" />
           <div className="hero-rule__tick" />
         </div>
+        <Disc ref={discRef} reduced={reduced} onDragChange={setDiscDragging} />
       </section>
 
       <nav className="sheet-nav">
@@ -476,7 +493,17 @@ export const Home = () => {
       </div>
 
       <footer className="sheet-footer">
-        <span>Designed by Ayaan Syed · scale 1:1</span>
+        <button
+          type="button"
+          className="text-btn"
+          onClick={() => {
+            flash("1:1 · drawn by hand");
+            setGridFlash(true);
+            window.setTimeout(() => setGridFlash(false), 900);
+          }}
+        >
+          Designed by Ayaan Syed · scale 1:1
+        </button>
         <div>
           <GhostLink href="https://github.com/ayaan-cs">GitHub ↗</GhostLink>
           <GhostLink href="https://linkedin.com/in/ayaan-syed">LinkedIn ↗</GhostLink>
