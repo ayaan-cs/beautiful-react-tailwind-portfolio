@@ -291,9 +291,6 @@ export function SkillSchematic({ playable = true }) {
             </div>
           )}
         </div>
-        <p className="schematic-rev">
-          Sheet stock · newsprint grain · lamp on the reticle
-        </p>
       </div>
     </div>
   );
