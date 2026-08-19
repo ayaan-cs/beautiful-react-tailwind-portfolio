@@ -5,7 +5,7 @@ import { ApplicationNotes } from "../components/sheet/ApplicationNotes";
 import { Disc } from "../components/sheet/Disc";
 import { LivePreview } from "../components/sheet/LivePreview";
 import { LogoWell } from "../components/sheet/LogoWell";
-import { Plotter } from "../components/sheet/Plotter";
+import { Plotter, SHEET_PLOTTED_KEY } from "../components/sheet/Plotter";
 import { Reticle } from "../components/sheet/Reticle";
 import { SkillSchematic } from "../components/sheet/SkillSchematic";
 import { SmoothScroll } from "../components/sheet/SmoothScroll";
@@ -40,6 +40,12 @@ const EXPAND_TITLES = {
   projects: "03 / Projects — drawings pending",
   freelance: "03 / Freelance — client work",
 };
+
+function shouldPlotSheet() {
+  if (typeof window === "undefined") return false;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+  return !sessionStorage.getItem(SHEET_PLOTTED_KEY);
+}
 
 function GhostLink({ href, children }) {
   return (
@@ -96,6 +102,8 @@ export const Home = () => {
   const [reduced, setReduced] = useState(false);
   const [hoverCard, setHoverCard] = useState(null);
   const [plotReplay, setPlotReplay] = useState(0);
+  const [plotting, setPlotting] = useState(shouldPlotSheet);
+  const [entering, setEntering] = useState(false);
   const [discDragging, setDiscDragging] = useState(false);
   const [gridFlash, setGridFlash] = useState(false);
   const discRef = useRef(null);
@@ -142,6 +150,12 @@ export const Home = () => {
       { id: "linkedin", label: "Open LinkedIn", kind: "Link", mark: "IN", run: () => window.open("https://linkedin.com/in/ayaan-syed", "_blank", "noopener") },
       { id: "cv", label: "Download CV", kind: "Util", mark: "CV", run: () => window.open(CV_URL, "_blank", "noopener") },
       { id: "email", label: "Copy email", kind: "Util", mark: "@", run: copyEmail },
+      { id: "motion", label: "Toggle reduced motion", kind: "Util", mark: "RM", run: () => {
+        setReduced((on) => {
+          flash(`Reduced motion ${on ? "off" : "on"}`);
+          return !on;
+        });
+      } },
       { id: "replot", label: "Re-plot sheet", kind: "Egg", mark: "PL", run: () => { setPlotReplay((n) => n + 1); flash("Re-plotting sheet"); } },
       { id: "cue", label: "Cue Side A", kind: "Egg", mark: "A", run: () => discRef.current?.toggle() },
     ];
@@ -189,9 +203,17 @@ export const Home = () => {
   const currentRole = WORK_ROLES[0];
 
   return (
-    <div className={`sheet${reduced ? " is-reduced" : ""}${gridFlash ? " is-grid-flash" : ""}`}>
-      <SmoothScroll reduced={reduced} paused={!!expanded || paletteOpen || discDragging} />
-      <Plotter reduced={reduced} replay={plotReplay} />
+    <div className={`sheet${reduced ? " is-reduced" : ""}${gridFlash ? " is-grid-flash" : ""}${plotting ? " is-plotting" : ""}${entering ? " is-entering" : ""}`}>
+      <SmoothScroll reduced={reduced} paused={plotting || !!expanded || paletteOpen || discDragging} />
+      <Plotter
+        reduced={reduced}
+        replay={plotReplay}
+        onDone={() => {
+          setPlotting(false);
+          setEntering(true);
+          window.setTimeout(() => setEntering(false), 900);
+        }}
+      />
 
       <header className="sheet-header">
         <div className="sheet-header__left">
