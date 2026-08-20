@@ -49,6 +49,8 @@ export const ProjectSheet = () => {
 
   if (!project) return <NotFound />;
 
+  const demoHost = project.demo.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
   return (
     <div className={`sheet${reduced ? " is-reduced" : ""}`}>
       <header className="sheet-header">
@@ -109,8 +111,47 @@ export const ProjectSheet = () => {
 
         <section className="panel project-panel">
           <div className="panel-head">
-            <div>A / What it is</div>
-            <span className="mute">Fig. 1 — Overview</span>
+            <div>A / {project.name} — detail sheet</div>
+            <a className="ghost-btn" href={project.demo} target="_blank" rel="noopener noreferrer">
+              Open live ↗
+            </a>
+          </div>
+
+          <div className="fig-head">
+            <span>Fig. 1 — Current build, live &amp; interactive</span>
+            <span className="mute">Try it below · pre-Rev. 02</span>
+          </div>
+          <div className="project-embed">
+            <div className="project-embed__bar">
+              <span className="project-embed__dots" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+              </span>
+              <span className="project-embed__url">{demoHost}</span>
+              <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                Open live ↗
+              </a>
+            </div>
+            <div className="project-embed__frame">
+              <iframe
+                src={project.demo}
+                title={`${project.name}, live interactive preview`}
+                loading="lazy"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            <div className="live-preview__note">
+              <span>Live embed — interact with the current build right here</span>
+              <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                Open in a new tab ↗
+              </a>
+            </div>
+          </div>
+
+          <div className="fig-head fig-head--spaced">
+            <span>Fig. 2 — What it is</span>
+            <span className="mute">Overview</span>
           </div>
           <div className="project-prose">
             {project.whatItIs.map((para) => (
@@ -119,7 +160,7 @@ export const ProjectSheet = () => {
           </div>
 
           <div className="fig-head fig-head--spaced">
-            <span>Fig. 2 — What is built</span>
+            <span>Fig. 3 — What is built</span>
             <span className="mute">{project.built.length} items</span>
           </div>
           <div className="project-log">
@@ -132,7 +173,7 @@ export const ProjectSheet = () => {
           </div>
 
           <div className="fig-head fig-head--spaced">
-            <span>Fig. 3 — What Rev. 02 is changing</span>
+            <span>Fig. 4 — What Rev. 02 is changing</span>
             <span className="mute">UI redesign · in progress</span>
           </div>
           <div className="project-log project-log--rev">
@@ -142,28 +183,6 @@ export const ProjectSheet = () => {
                 <span>{pt}</span>
               </div>
             ))}
-          </div>
-
-          <div className="fig-head fig-head--spaced">
-            <span>Fig. 4 — Current build, live</span>
-            <span className="mute">Honest artifact · pre-Rev. 02</span>
-          </div>
-          <div className="project-embed">
-            <div className="live-preview__kicker">Dwg. {project.ref} · live embed</div>
-            <div className="project-embed__frame">
-              <iframe
-                src={project.demo}
-                title={`${project.name}, live preview`}
-                loading="lazy"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            <div className="live-preview__note">
-              <span>Live embed — {project.demo.replace(/^https?:\/\//, "").replace(/\/$/, "")}</span>
-              <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                Open live ↗
-              </a>
-            </div>
           </div>
 
           <aside className="callout project-callout">
