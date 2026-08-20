@@ -404,7 +404,6 @@ export const PROJECTS = [
       "React Router",
       "Recharts",
       "Hugging Face Inference · DeepSeek-R1",
-      "Create React App",
     ],
     demo: MINDSIGHT_URL,
     repo: MINDSIGHT_REPO,
