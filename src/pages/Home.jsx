@@ -48,6 +48,15 @@ function shouldPlotSheet() {
   return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
+/**
+ * Module-level session state. These persist across client-side route changes
+ * (e.g. leaving to a project sheet and coming back) but reset on a full page
+ * load — so the plotter intro only plays when you first load into the site,
+ * and returning to Sheet 01 lands you back on the tab you left from.
+ */
+let introHasPlayed = false;
+let lastHomeTab = "about";
+
 function GhostLink({ href, children }) {
   return (
     <a href={href} target="_blank" rel="noopener noreferrer">
@@ -94,7 +103,7 @@ function ExperienceRow({ role }) {
 }
 
 export const Home = () => {
-  const [tab, setTab] = useState("about");
+  const [tab, setTab] = useState(lastHomeTab);
   const [expanded, setExpanded] = useState(null);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -103,7 +112,7 @@ export const Home = () => {
   const [reduced, setReduced] = useState(false);
   const [hoverCard, setHoverCard] = useState(null);
   const [plotReplay, setPlotReplay] = useState(0);
-  const [plotting, setPlotting] = useState(shouldPlotSheet);
+  const [plotting, setPlotting] = useState(() => shouldPlotSheet() && !introHasPlayed);
   const [entering, setEntering] = useState(false);
   const [discDragging, setDiscDragging] = useState(false);
   const [gridFlash, setGridFlash] = useState(false);
@@ -116,6 +125,14 @@ export const Home = () => {
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
   }, []);
+
+  useEffect(() => {
+    introHasPlayed = true;
+  }, []);
+
+  useEffect(() => {
+    lastHomeTab = tab;
+  }, [tab]);
 
   useEffect(() => {
     document.body.style.overflow = expanded || paletteOpen ? "hidden" : "";
@@ -220,6 +237,7 @@ export const Home = () => {
       <Plotter
         reduced={reduced}
         replay={plotReplay}
+        play={plotting}
         onDone={() => {
           setPlotting(false);
           setEntering(true);
