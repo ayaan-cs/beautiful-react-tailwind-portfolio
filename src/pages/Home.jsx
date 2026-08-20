@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types, react/no-unescaped-entities */
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AlbumShelf } from "../components/sheet/AlbumShelf";
 import { ApplicationNotes } from "../components/sheet/ApplicationNotes";
 import { Disc } from "../components/sheet/Disc";
@@ -103,8 +103,10 @@ function ExperienceRow({ role }) {
 }
 
 export const Home = () => {
-  const [tab, setTab] = useState(lastHomeTab);
-  const [expanded, setExpanded] = useState(null);
+  const location = useLocation();
+  const backTo = location.state?.expand ?? null;
+  const [tab, setTab] = useState(backTo ? "projects" : lastHomeTab);
+  const [expanded, setExpanded] = useState(backTo);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [cursor, setCursor] = useState(0);

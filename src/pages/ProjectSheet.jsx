@@ -55,8 +55,8 @@ export const ProjectSheet = () => {
     <div className={`sheet${reduced ? " is-reduced" : ""}`}>
       <header className="sheet-header">
         <div className="sheet-header__left">
-          <Link to="/" className="sheet-header__title text-btn">
-            ← Back to Sheet 01
+          <Link to="/" state={{ expand: "projects" }} className="sheet-header__title text-btn">
+            ← Back to Projects
           </Link>
           <span className="mute">{project.ref} · {project.name}</span>
         </div>
@@ -191,8 +191,8 @@ export const ProjectSheet = () => {
               <p>{project.notItIs}</p>
             </div>
             <div className="callout__actions">
-              <Link className="ghost-btn" to="/">
-                ← Sheet 01
+              <Link className="ghost-btn" to="/" state={{ expand: "projects" }}>
+                ← Projects
               </Link>
               <GhostLink href={project.repo}>GitHub ↗</GhostLink>
             </div>
@@ -201,8 +201,8 @@ export const ProjectSheet = () => {
       </div>
 
       <footer className="sheet-footer">
-        <Link to="/" className="text-btn">
-          ← Back to Sheet 01
+        <Link to="/" state={{ expand: "projects" }} className="text-btn">
+          ← Back to Projects
         </Link>
         <div>
           <GhostLink href="https://github.com/ayaan-cs">GitHub ↗</GhostLink>
