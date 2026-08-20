@@ -1256,9 +1256,99 @@ a.drawing-row:hover .drawing-row__status { color: var(--rust); }
 .drawing-row.is-pending { color: rgba(28, 27, 25, 0.4); }
 .drawing-row.is-pending .drawing-row__name { color: rgba(28, 27, 25, 0.5); font-weight: 500; }
 .drawing-row.is-pending .drawing-row__status { color: rgba(28, 27, 25, 0.4); }
-.drawing-index--full { border-top: 0; margin: 4px 0 6px; }
-.drawing-index--full .drawing-row { padding: 16px 4px; }
-.drawing-index--full .drawing-row:first-child { border-top: 1px solid var(--ink-18); }
+/* Expanded Projects overlay — index of drawings */
+.projects-full { gap: 24px; }
+.projects-full__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+.projects-full__head h2 { margin: 0 0 6px; }
+.projects-full__count {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(28, 27, 25, 0.5);
+  white-space: nowrap;
+}
+.projects-full__count .accent { color: var(--rust); font-size: 22px; }
+.dwg-list { display: flex; flex-direction: column; gap: 16px; }
+.dwg-card {
+  display: grid;
+  grid-template-columns: 168px minmax(0, 1fr) auto;
+  gap: 30px;
+  align-items: center;
+  border: 1px solid var(--ink-28);
+  padding: 24px 26px;
+  color: var(--ink);
+  background: rgba(246, 241, 231, 0.55);
+  transition: border-color 150ms ease, background 150ms ease;
+}
+a.dwg-card:hover { border-color: var(--rust); background: rgba(193, 68, 14, 0.04); }
+.dwg-card__meta {
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.dwg-card__ref { color: rgba(28, 27, 25, 0.5); }
+.dwg-card__status {
+  color: var(--rust);
+  border-left: 2px solid var(--rust);
+  padding-left: 9px;
+  line-height: 1.5;
+}
+.dwg-card__title {
+  font-size: clamp(21px, 2.4vw, 27px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.dwg-card__lead {
+  margin: 0 0 14px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: rgba(28, 27, 25, 0.75);
+  max-width: 62ch;
+}
+.dwg-card__stack { display: flex; flex-wrap: wrap; gap: 6px; }
+.dwg-chip {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid var(--ink-18);
+  padding: 4px 8px;
+  color: rgba(28, 27, 25, 0.6);
+  background: var(--paper);
+}
+.dwg-card__go {
+  align-self: center;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rust);
+  white-space: nowrap;
+}
+.dwg-card.is-pending {
+  border-style: dashed;
+  background: rgba(28, 27, 25, 0.02);
+}
+.dwg-card.is-pending .dwg-card__ref,
+.dwg-card.is-pending .dwg-card__go { color: rgba(28, 27, 25, 0.38); }
+.dwg-card.is-pending .dwg-card__status { color: rgba(28, 27, 25, 0.42); border-left-color: var(--ink-28); }
+.dwg-card.is-pending .dwg-card__title { color: rgba(28, 27, 25, 0.5); font-weight: 500; }
+.dwg-card.is-pending .dwg-card__lead { color: rgba(28, 27, 25, 0.45); }
 
 /* Project detail sheet (/projects/:slug) */
 .project-hero { padding-bottom: 22px; }
@@ -1598,4 +1688,7 @@ a.drawing-row:hover .drawing-row__status { color: var(--rust); }
   .project-log .log-point { font-size: 15px; }
   .project-prose p { font-size: 15.5px; }
   .project-embed__frame { aspect-ratio: 3 / 4; min-height: 440px; }
+  .dwg-card { grid-template-columns: 1fr; gap: 16px; padding: 20px; }
+  .dwg-card__meta { flex-direction: row; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .dwg-card__go { justify-self: start; }
 }

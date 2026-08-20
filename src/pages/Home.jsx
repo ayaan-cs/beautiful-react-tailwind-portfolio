@@ -755,25 +755,55 @@ export const Home = () => {
             )}
 
             {expanded === "projects" && (
-              <div className="pending-sheet">
-                <h2>Projects</h2>
-                <p className="mute">Group A · personal drawings — each opens as its own sheet</p>
-                <div className="drawing-index drawing-index--full">
+              <div className="pending-sheet projects-full">
+                <div className="projects-full__head">
+                  <div>
+                    <h2>Projects</h2>
+                    <p className="mute">Group A · personal drawings — each opens as its own full sheet.</p>
+                  </div>
+                  <div className="projects-full__count">
+                    <span className="accent">{PROJECTS.length}</span>
+                    <span>on file</span>
+                  </div>
+                </div>
+                <div className="dwg-list">
                   {PROJECTS.map((p) => (
                     <Link
                       key={p.slug}
                       to={`/projects/${p.slug}`}
-                      className="drawing-row"
+                      className="dwg-card"
                       onClick={closeSheet}
                     >
-                      <span className="drawing-row__ref">{p.ref}</span>
-                      <span className="drawing-row__name">{p.name}</span>
-                      <span className="drawing-row__status">{p.status}</span>
-                      <span className="drawing-row__arrow">↗</span>
+                      <div className="dwg-card__meta">
+                        <span className="dwg-card__ref">{p.ref}</span>
+                        <span className="dwg-card__status">{p.status}</span>
+                      </div>
+                      <div className="dwg-card__body">
+                        <div className="dwg-card__title">{p.name}</div>
+                        <p className="dwg-card__lead">{p.oneLine}</p>
+                        <div className="dwg-card__stack">
+                          {p.stack.map((s) => (
+                            <span key={s} className="dwg-chip">{s}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <span className="dwg-card__go">Open sheet ↗</span>
                     </Link>
                   ))}
+                  <div className="dwg-card is-pending">
+                    <div className="dwg-card__meta">
+                      <span className="dwg-card__ref">DWG-—</span>
+                      <span className="dwg-card__status">On the board</span>
+                    </div>
+                    <div className="dwg-card__body">
+                      <div className="dwg-card__title">Next drawings</div>
+                      <p className="dwg-card__lead">
+                        More personal work is in progress — added to the index as each sheet is drawn.
+                      </p>
+                    </div>
+                    <span className="dwg-card__go" aria-hidden="true">—</span>
+                  </div>
                 </div>
-                <div className="pending-box">Next drawings on the board — added as they are drawn.</div>
               </div>
             )}
 
