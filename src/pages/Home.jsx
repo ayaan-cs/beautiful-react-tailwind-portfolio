@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types, react/no-unescaped-entities */
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { AlbumShelf } from "../components/sheet/AlbumShelf";
 import { ApplicationNotes } from "../components/sheet/ApplicationNotes";
 import { Disc } from "../components/sheet/Disc";
@@ -19,6 +20,7 @@ import {
   FILMS,
   OUTSIDE_COPY,
   PAW_HAVEN_URL,
+  PROJECTS,
   MONOS,
   SLUGS,
   STACK_CATS,
@@ -37,7 +39,7 @@ const TABS = [
 const EXPAND_TITLES = {
   about: "01 / About — full sheet",
   stack: "02 / Stack — full schedule",
-  projects: "03 / Projects — drawings pending",
+  projects: "03 / Projects — Group A drawings",
   freelance: "03 / Freelance — client work",
 };
 
@@ -443,8 +445,24 @@ export const Home = () => {
               </div>
               <div className="hairline" />
               <p>Personal work — tools and experiments I built because I wanted to.</p>
+              <div className="drawing-index">
+                {PROJECTS.map((p) => (
+                  <Link key={p.slug} to={`/projects/${p.slug}`} className="drawing-row">
+                    <span className="drawing-row__ref">{p.ref}</span>
+                    <span className="drawing-row__name">{p.name}</span>
+                    <span className="drawing-row__status">{p.status}</span>
+                    <span className="drawing-row__arrow">↗</span>
+                  </Link>
+                ))}
+                <div className="drawing-row is-pending">
+                  <span className="drawing-row__ref">DWG-—</span>
+                  <span className="drawing-row__name">Next drawings</span>
+                  <span className="drawing-row__status">On the board</span>
+                  <span className="drawing-row__arrow" aria-hidden="true" />
+                </div>
+              </div>
               <div className="group-card__foot">
-                <span className="mute">Drawings pending</span>
+                <span className="mute">{PROJECTS.length} drawing on file</span>
                 <button type="button" className="ghost-btn" onClick={() => openSheet("projects")}>
                   Expand ↗
                 </button>
@@ -719,8 +737,23 @@ export const Home = () => {
             {expanded === "projects" && (
               <div className="pending-sheet">
                 <h2>Projects</h2>
-                <p className="mute">Sheet reserved · detail drawings pending</p>
-                <div className="pending-box">Left blank intentionally, to be added when less busy.</div>
+                <p className="mute">Group A · personal drawings — each opens as its own sheet</p>
+                <div className="drawing-index drawing-index--full">
+                  {PROJECTS.map((p) => (
+                    <Link
+                      key={p.slug}
+                      to={`/projects/${p.slug}`}
+                      className="drawing-row"
+                      onClick={closeSheet}
+                    >
+                      <span className="drawing-row__ref">{p.ref}</span>
+                      <span className="drawing-row__name">{p.name}</span>
+                      <span className="drawing-row__status">{p.status}</span>
+                      <span className="drawing-row__arrow">↗</span>
+                    </Link>
+                  ))}
+                </div>
+                <div className="pending-box">Next drawings on the board — added as they are drawn.</div>
               </div>
             )}
 
