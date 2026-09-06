@@ -1384,7 +1384,6 @@ a.dwg-card:hover { border-color: var(--rust); background: rgba(193, 68, 14, 0.04
 }
 .project-titleblock__v { color: var(--ink); }
 .project-titleblock__v.accent { color: var(--rust); }
-.project-links { display: flex; flex-wrap: wrap; gap: 10px; }
 .project-prose { display: flex; flex-direction: column; gap: 16px; max-width: 70ch; }
 .project-prose p { margin: 0; font-size: 16.5px; line-height: 1.65; }
 .project-log { display: flex; flex-direction: column; }

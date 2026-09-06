@@ -99,14 +99,6 @@ export const ProjectSheet = () => {
               <span className="project-titleblock__v">{project.stack.join(" · ")}</span>
             </div>
           </div>
-          <div className="project-links">
-            <a className="solid-btn" href={project.demo} target="_blank" rel="noopener noreferrer">
-              Live demo ↗
-            </a>
-            <a className="ghost-btn" href={project.repo} target="_blank" rel="noopener noreferrer">
-              GitHub ↗
-            </a>
-          </div>
         </section>
 
         <section className="panel project-panel">
