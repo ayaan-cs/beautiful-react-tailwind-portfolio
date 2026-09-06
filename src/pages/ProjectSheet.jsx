@@ -183,9 +183,6 @@ export const ProjectSheet = () => {
               <p>{project.notItIs}</p>
             </div>
             <div className="callout__actions">
-              <Link className="ghost-btn" to="/" state={{ expand: "projects" }}>
-                ← Projects
-              </Link>
               <GhostLink href={project.repo}>GitHub ↗</GhostLink>
             </div>
           </aside>
