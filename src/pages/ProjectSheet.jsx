@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { CursorCoords } from "../components/sheet/CursorCoords";
 import { Reticle } from "../components/sheet/Reticle";
-import { COORDS, EMAIL, projectBySlug } from "../data/portfolio";
+import { EMAIL, projectBySlug } from "../data/portfolio";
 import { NotFound } from "./NotFound";
 
 function GhostLink({ href, children }) {
@@ -61,7 +62,7 @@ export const ProjectSheet = () => {
           <span className="mute">{project.ref} · {project.name}</span>
         </div>
         <div className="sheet-header__right">
-          <span>{COORDS}</span>
+          <CursorCoords />
           <span
             className="status-dot"
             role="button"

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AlbumShelf } from "../components/sheet/AlbumShelf";
 import { ApplicationNotes } from "../components/sheet/ApplicationNotes";
+import { CursorCoords } from "../components/sheet/CursorCoords";
 import { Disc } from "../components/sheet/Disc";
 import { LivePreview } from "../components/sheet/LivePreview";
 import { LogoWell } from "../components/sheet/LogoWell";
@@ -12,7 +13,6 @@ import { SkillSchematic } from "../components/sheet/SkillSchematic";
 import { SmoothScroll } from "../components/sheet/SmoothScroll";
 import {
   CERTS,
-  COORDS,
   CV_FILENAME,
   CV_URL,
   EDU_ROLE,
@@ -259,7 +259,7 @@ export const Home = () => {
           <span className="mute">Rev. 2026.08</span>
         </div>
         <div className="sheet-header__right">
-          <span>{COORDS}</span>
+          <CursorCoords />
           <span
             className="status-dot"
             role="button"
