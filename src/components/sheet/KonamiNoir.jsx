@@ -12,15 +12,15 @@ const SEQUENCE = [
   "b",
   "a",
 ];
-const STORAGE_KEY = "blueprint-neg";
+const STORAGE_KEY = "noir";
 
-export function KonamiBlueprint() {
+export function KonamiNoir() {
   const [toast, setToast] = useState(null);
   const toastTimer = useRef(0);
 
   useEffect(() => {
     if (sessionStorage.getItem(STORAGE_KEY) === "1") {
-      document.body.classList.add("blueprint-neg");
+      document.body.classList.add("noir");
     }
   }, []);
 
@@ -43,13 +43,13 @@ export function KonamiBlueprint() {
         idx += 1;
         if (idx === SEQUENCE.length) {
           idx = 0;
-          const on = document.body.classList.toggle("blueprint-neg");
+          const on = document.body.classList.toggle("noir");
           if (on) {
             sessionStorage.setItem(STORAGE_KEY, "1");
           } else {
             sessionStorage.removeItem(STORAGE_KEY);
           }
-          flash(on ? "Blueprint negative — plotted" : "Blueprint negative — cleared");
+          flash(on ? "Noir — developed" : "Noir — cleared");
         }
       } else {
         idx = key === SEQUENCE[0] ? 1 : 0;

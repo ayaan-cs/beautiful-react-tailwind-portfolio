@@ -2,12 +2,12 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { NotFound } from "./pages/NotFound";
 import { ProjectSheet } from "./pages/ProjectSheet";
-import { KonamiBlueprint } from "./components/sheet/KonamiBlueprint";
+import { KonamiNoir } from "./components/sheet/KonamiNoir";
 
 function App() {
   return (
     <BrowserRouter>
-      <KonamiBlueprint />
+      <KonamiNoir />
       <Routes>
         <Route index element={<Home />} />
         <Route path="/projects/:slug" element={<ProjectSheet />} />
