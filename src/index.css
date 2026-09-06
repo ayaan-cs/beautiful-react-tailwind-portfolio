@@ -38,6 +38,24 @@ a { color: var(--ink); text-decoration: none; }
 a:hover { color: var(--rust); }
 ::selection { background: rgba(193, 68, 14, 0.18); }
 
+/* Easter egg: Konami code flips the sheet to a classic blueprint negative. */
+body.blueprint-neg {
+  --paper: #103a5e;
+  --ink: #eaf3fb;
+  --rust: #ff6a3d;
+  --ink-55: rgba(234, 243, 251, 0.62);
+  --ink-50: rgba(234, 243, 251, 0.56);
+  --ink-32: rgba(234, 243, 251, 0.4);
+  --ink-28: rgba(234, 243, 251, 0.34);
+  --ink-22: rgba(234, 243, 251, 0.26);
+  --ink-18: rgba(234, 243, 251, 0.2);
+}
+body.blueprint-neg,
+body.blueprint-neg #root {
+  background-image: radial-gradient(rgba(234, 243, 251, 0.22) 1px, transparent 1px);
+}
+body.blueprint-neg ::selection { background: rgba(255, 106, 61, 0.28); }
+
 .mono, .sheet-header, .sheet-nav, .kicker, .fig-head, .ghost-btn, .solid-btn,
 .sheet-footer, .overlay-bar, .log-row__meta, .note-kicker, .tool-id, .cert-card__id,
 .cert-card__skills, .status-dot, .current-card__meta, .palette, .toast {
