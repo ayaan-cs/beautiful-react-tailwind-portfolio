@@ -517,7 +517,6 @@ export const Home = () => {
                   Copy email
                 </button>
                 <GhostLink href="https://linkedin.com/in/ayaan-syed">LinkedIn ↗</GhostLink>
-                <GhostLink href="https://github.com/ayaan-cs">GitHub ↗</GhostLink>
               </div>
             </aside>
           </div>
