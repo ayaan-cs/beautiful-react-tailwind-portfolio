@@ -379,6 +379,58 @@ export const MONOS = {
   Mentoring: "MTR",
 };
 
+export const MINDSIGHT_URL = "https://mindsight-app.netlify.app/";
+export const MINDSIGHT_REPO = "https://github.com/ayaan-cs/MindSight";
+
+/**
+ * Personal project drawings (Group A). MindSight is the first drawing on file;
+ * everything else stays a "next drawing" until its sheet is drawn.
+ * Facts below are pulled from the MindSight repo (README-less) and live demo —
+ * no invented neuroscience claims.
+ */
+export const PROJECTS = [
+  {
+    slug: "mindsight",
+    ref: "DWG-01",
+    name: "MindSight",
+    group: "personal",
+    onFile: true,
+    status: "Rev. 02 — UI in revision",
+    oneLine:
+      "A friendly EEG viewer & interpreter — look at a brain recording, measure the rhythms inside it, then read a plain-language interpretation.",
+    dates: "May 2025 – Present",
+    stack: [
+      "React",
+      "React Router",
+      "Recharts",
+      "Hugging Face Inference · DeepSeek-R1",
+    ],
+    demo: MINDSIGHT_URL,
+    repo: MINDSIGHT_REPO,
+    whatItIs: [
+      "MindSight is a single-page React workspace for looking at EEG — the electrical chatter a brain gives off, picked up by sensors on the scalp. It draws the recording the way clinicians read it, measures the rhythms hiding inside, and then explains what those numbers might suggest in ordinary words. No background required.",
+      "The whole app is built around one honest order: raw signal → measurements → interpretation. The wave stays in plain ink and is never filtered or scored. The measurements are deterministic — the same numbers every time. The model's reading is kept in its own panel on purpose, because it can be wrong and is never a diagnosis.",
+    ],
+    built: [
+      "A six-view workspace (Overview, Load data, Workspace, Band reference, Export, About) wired with React Router.",
+      "Load a public research sample (PhysioNet, OpenNeuro, Kaggle), bring your own .edf / .csv, or use a clearly-labelled generated practice signal.",
+      "Raw waveform rendered with Recharts, plus the five frequency bands — delta, theta, alpha, beta, gamma — measured as band energies, ratios, and a signal-quality read.",
+      "A plain-language reading from a language model (DeepSeek-R1 via Hugging Face Inference) with neuroscience-specific prompting, reported alongside confidence, the exact seconds analysed, and an honest list of what it cannot tell you.",
+      "Export to CSV / JSON / report, a band-rhythm reference, an auth modal, and an EmailJS contact form.",
+    ],
+    rev02: [
+      "Rev. 02 pulls the interface into this same plain-ink sheet language — the medical-dashboard chrome is being replaced with the raw signal → measurements → interpretation flow drawn as distinct sheet panels.",
+      "Bands become colour- and pattern-coded so they stay readable without relying on hue, and the model's interpretation is visually isolated so a suggestion is never mistaken for a measurement.",
+      "The live demo below is the current, pre-Rev. 02 build. The redesign is in progress — this sheet shows what exists today, not a shipped mockup.",
+    ],
+    notItIs: "Not a medical device and not a diagnosis. Sample recordings come from public research archives; the practice signal is generated and labelled wherever it appears.",
+  },
+];
+
+export function projectBySlug(slug) {
+  return PROJECTS.find((p) => p.slug === slug) || null;
+}
+
 export const SCHEMATIC_PROJECTS = [
   {
     ref: "PRJ-001",

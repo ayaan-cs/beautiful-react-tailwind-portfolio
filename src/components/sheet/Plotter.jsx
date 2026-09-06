@@ -62,13 +62,13 @@ function measureSheet(width, height) {
   return { d: parts.join(" "), titleY, titleTextY, titleX, titleEndX };
 }
 
-export function Plotter({ reduced, replay = 0, onDone }) {
+export function Plotter({ reduced, replay = 0, play = true, onDone }) {
   const pathRef = useRef(null);
   const headRef = useRef(null);
   const doneRef = useRef(onDone);
   const finishRef = useRef(() => {});
   const [size, setSize] = useState({ w: 0, h: 0 });
-  const [phase, setPhase] = useState(initialPhase);
+  const [phase, setPhase] = useState(() => (play ? initialPhase() : "gone"));
   const [layout, setLayout] = useState(null);
 
   doneRef.current = onDone;

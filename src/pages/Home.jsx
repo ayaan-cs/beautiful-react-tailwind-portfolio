@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types, react/no-unescaped-entities */
 import { useEffect, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { AlbumShelf } from "../components/sheet/AlbumShelf";
 import { ApplicationNotes } from "../components/sheet/ApplicationNotes";
+import { CursorCoords } from "../components/sheet/CursorCoords";
 import { Disc } from "../components/sheet/Disc";
 import { LivePreview } from "../components/sheet/LivePreview";
 import { LogoWell } from "../components/sheet/LogoWell";
@@ -11,7 +13,6 @@ import { SkillSchematic } from "../components/sheet/SkillSchematic";
 import { SmoothScroll } from "../components/sheet/SmoothScroll";
 import {
   CERTS,
-  COORDS,
   CV_FILENAME,
   CV_URL,
   EDU_ROLE,
@@ -19,6 +20,7 @@ import {
   FILMS,
   OUTSIDE_COPY,
   PAW_HAVEN_URL,
+  PROJECTS,
   MONOS,
   SLUGS,
   STACK_CATS,
@@ -37,7 +39,7 @@ const TABS = [
 const EXPAND_TITLES = {
   about: "01 / About — full sheet",
   stack: "02 / Stack — full schedule",
-  projects: "03 / Projects — drawings pending",
+  projects: "03 / Projects — Group A drawings",
   freelance: "03 / Freelance — client work",
 };
 
@@ -45,6 +47,15 @@ function shouldPlotSheet() {
   if (typeof window === "undefined") return false;
   return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
+
+/**
+ * Module-level session state. These persist across client-side route changes
+ * (e.g. leaving to a project sheet and coming back) but reset on a full page
+ * load — so the plotter intro only plays when you first load into the site,
+ * and returning to Sheet 01 lands you back on the tab you left from.
+ */
+let introHasPlayed = false;
+let lastHomeTab = "about";
 
 function GhostLink({ href, children }) {
   return (
@@ -92,8 +103,10 @@ function ExperienceRow({ role }) {
 }
 
 export const Home = () => {
-  const [tab, setTab] = useState("about");
-  const [expanded, setExpanded] = useState(null);
+  const location = useLocation();
+  const backTo = location.state?.expand ?? null;
+  const [tab, setTab] = useState(backTo ? "projects" : lastHomeTab);
+  const [expanded, setExpanded] = useState(backTo);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [cursor, setCursor] = useState(0);
@@ -101,7 +114,7 @@ export const Home = () => {
   const [reduced, setReduced] = useState(false);
   const [hoverCard, setHoverCard] = useState(null);
   const [plotReplay, setPlotReplay] = useState(0);
-  const [plotting, setPlotting] = useState(shouldPlotSheet);
+  const [plotting, setPlotting] = useState(() => shouldPlotSheet() && !introHasPlayed);
   const [entering, setEntering] = useState(false);
   const [discDragging, setDiscDragging] = useState(false);
   const [gridFlash, setGridFlash] = useState(false);
@@ -114,6 +127,14 @@ export const Home = () => {
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
   }, []);
+
+  useEffect(() => {
+    introHasPlayed = true;
+  }, []);
+
+  useEffect(() => {
+    lastHomeTab = tab;
+  }, [tab]);
 
   useEffect(() => {
     document.body.style.overflow = expanded || paletteOpen ? "hidden" : "";
@@ -218,6 +239,7 @@ export const Home = () => {
       <Plotter
         reduced={reduced}
         replay={plotReplay}
+        play={plotting}
         onDone={() => {
           setPlotting(false);
           setEntering(true);
@@ -237,7 +259,7 @@ export const Home = () => {
           <span className="mute">Rev. 2026.08</span>
         </div>
         <div className="sheet-header__right">
-          <span>{COORDS}</span>
+          <CursorCoords />
           <span
             className="status-dot"
             role="button"
@@ -443,8 +465,24 @@ export const Home = () => {
               </div>
               <div className="hairline" />
               <p>Personal work — tools and experiments I built because I wanted to.</p>
+              <div className="drawing-index">
+                {PROJECTS.map((p) => (
+                  <Link key={p.slug} to={`/projects/${p.slug}`} className="drawing-row">
+                    <span className="drawing-row__ref">{p.ref}</span>
+                    <span className="drawing-row__name">{p.name}</span>
+                    <span className="drawing-row__status">{p.status}</span>
+                    <span className="drawing-row__arrow">↗</span>
+                  </Link>
+                ))}
+                <div className="drawing-row is-pending">
+                  <span className="drawing-row__ref">DWG-—</span>
+                  <span className="drawing-row__name">Next drawings</span>
+                  <span className="drawing-row__status">On the board</span>
+                  <span className="drawing-row__arrow" aria-hidden="true" />
+                </div>
+              </div>
               <div className="group-card__foot">
-                <span className="mute">Drawings pending</span>
+                <span className="mute">{PROJECTS.length} drawing on file</span>
                 <button type="button" className="ghost-btn" onClick={() => openSheet("projects")}>
                   Expand ↗
                 </button>
@@ -479,7 +517,6 @@ export const Home = () => {
                   Copy email
                 </button>
                 <GhostLink href="https://linkedin.com/in/ayaan-syed">LinkedIn ↗</GhostLink>
-                <GhostLink href="https://github.com/ayaan-cs">GitHub ↗</GhostLink>
               </div>
             </aside>
           </div>
@@ -717,10 +754,55 @@ export const Home = () => {
             )}
 
             {expanded === "projects" && (
-              <div className="pending-sheet">
-                <h2>Projects</h2>
-                <p className="mute">Sheet reserved · detail drawings pending</p>
-                <div className="pending-box">Left blank intentionally, to be added when less busy.</div>
+              <div className="pending-sheet projects-full">
+                <div className="projects-full__head">
+                  <div>
+                    <h2>Projects</h2>
+                    <p className="mute">Group A · personal drawings — each opens as its own full sheet.</p>
+                  </div>
+                  <div className="projects-full__count">
+                    <span className="accent">{PROJECTS.length}</span>
+                    <span>on file</span>
+                  </div>
+                </div>
+                <div className="dwg-list">
+                  {PROJECTS.map((p) => (
+                    <Link
+                      key={p.slug}
+                      to={`/projects/${p.slug}`}
+                      className="dwg-card"
+                      onClick={closeSheet}
+                    >
+                      <div className="dwg-card__meta">
+                        <span className="dwg-card__ref">{p.ref}</span>
+                        <span className="dwg-card__status">{p.status}</span>
+                      </div>
+                      <div className="dwg-card__body">
+                        <div className="dwg-card__title">{p.name}</div>
+                        <p className="dwg-card__lead">{p.oneLine}</p>
+                        <div className="dwg-card__stack">
+                          {p.stack.map((s) => (
+                            <span key={s} className="dwg-chip">{s}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <span className="dwg-card__go">Open sheet ↗</span>
+                    </Link>
+                  ))}
+                  <div className="dwg-card is-pending">
+                    <div className="dwg-card__meta">
+                      <span className="dwg-card__ref">DWG-—</span>
+                      <span className="dwg-card__status">On the board</span>
+                    </div>
+                    <div className="dwg-card__body">
+                      <div className="dwg-card__title">Next drawings</div>
+                      <p className="dwg-card__lead">
+                        More personal work is in progress — added to the index as each sheet is drawn.
+                      </p>
+                    </div>
+                    <span className="dwg-card__go" aria-hidden="true">—</span>
+                  </div>
+                </div>
               </div>
             )}
 
